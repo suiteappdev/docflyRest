@@ -1,0 +1,107 @@
+var barrio = function(router, args){
+	router.get('/barrio', args.security.Auth, function(req, res, next) {
+ 		res.setHeader('Content-Type', 'application/json');
+ 				var _acl = req.credential;
+		if(_acl.formularios[4].permisos.R){
+			args.schema.find({}, function(err, values){
+				if(!err){
+				args.schema.find({}, function(err, values){
+ 				if(!err){
+				res.send(JSON.stringify(values));	 				
+ 			}
+		});
+				}
+			})
+		}else{
+		res.status(401);
+		res.end();
+		}
+	});
+
+	router.get('/barrio/:id', args.security.Auth, function(req, res, next){
+ 		res.setHeader('Content-Type', 'application/json');
+ 		var _acl = req.credential;
+		if(_acl.formularios[4].permisos.R){
+			args.schema.find({}, function(err, values){
+				if(!err){
+					args.schema.findOne({_id : req.param('id')}, function(err, value){
+	 				if(!err){
+	 				res.send(JSON.stringify(value));
+ 				}
+ 		});
+				}
+			})
+		}else{
+			res.status(401);
+			res.end();
+		}
+	});
+
+	router.get('/localizacion/:id', args.security.Auth, function(req, res, next){
+ 		res.setHeader('Content-Type', 'application/json');
+ 		var _acl = req.credential;
+		if(_acl.formularios[4].permisos.R){
+			args.schema.find({}, function(err, values){
+				if(!err){
+					args.schema.find({code: req.params.id}, function(err, value){
+		 			if(!err){
+		 			res.send(JSON.stringify(value));
+ 			}
+ 		});
+				}
+			})
+		}else{
+			res.status(401);
+			res.end();
+		}
+
+	});
+
+	router.post('/barrio', args.security.Auth, function(req, res, next) {
+ 		res.setHeader('Content-Type', 'application/json');
+ 		var _barrio = new args.schema({
+ 			code 				: req.body.code,
+ 			nombre 				: req.body.nombre,
+ 			created				: new Date(),
+			metadata			: req.body.metadata
+ 		});
+
+ 		_barrio.save(function(err, value){
+ 			if(!err){
+ 				res.send(JSON.stringify(value));
+ 			}
+ 		});
+	});
+
+	router.put('/barrio/:id', args.security.Auth, function(req, res, next) {
+ 		res.setHeader('Content-Type', 'application/json');
+ 		args.schema.findById({_id : req.params.id}, function(err, value){
+ 			if(!err){
+ 				value.code 				= req.body.code,
+ 				value.nombre 				= req.body.nombre,
+				value.metadata		= req.body.metadata;
+				value.updated		= new Date();
+
+ 				value.save(function(err, updated){
+ 					res.send(JSON.stringify(updated));
+ 				});
+ 			}
+ 		})
+	});
+
+	router.delete('/barrio/:id', args.security.Auth, function(req, res, next) {
+ 		res.setHeader('Content-Type', 'application/json');
+ 		args.schema.findById({_id : req.params.id}, function(err, value){
+ 			if(!err){
+ 				value.remove();
+				res.sendStatus(200);
+				return;
+ 			}
+
+ 			res.sendStatus(500);
+ 		})
+	});
+
+};
+
+module.exports = barrio;

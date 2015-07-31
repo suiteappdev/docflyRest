@@ -1,27 +1,50 @@
 var iva = function(router, args){
-	router.get('/iva', function(req, res, next) {
+	router.get('/iva', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
-
- 		args.schema.find({}, function(err, values){
+ 		var _acl = req.credential;
+		if(_acl.formularios[8].permisos.R){
+			args.schema.find({}, function(err, values){
+				if(!err){
+ 			args.schema.find({}, function(err, values){
  			if(!err){
 				res.send(JSON.stringify(values));	 				
  			}
 		});
+				}
+			})
+		}else{
+			res.status(401);
+			res.end();
+		}
+
 
 	});
 
-	router.get('/iva/:id', function(req, res, next){
+	router.get('/iva/:id', args.security.Auth, function(req, res, next){
  		res.setHeader('Content-Type', 'application/json');
- 		
+ 		var _acl = req.credential;
+		if(_acl.formularios[8].permisos.R){
+			args.schema.find({}, function(err, values){
+				if(!err){
  		args.schema.findOne({_id : req.param('id')}, function(err, value){
  			if(!err){
  				res.send(JSON.stringify(value));
  			}
  		});
+				}
+			})
+		}else{
+		res.status(401);
+		res.end();
+		}
 	});
 
-	router.post('/iva', function(req, res, next) {
+	router.post('/iva', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
+ 		var _acl = req.credential;
+		if(_acl.formularios[8].permisos.W){
+			args.schema.find({}, function(err, values){
+				if(!err){
  		var _iva = new args.schema({
  			valor 				: req.body.valor,
  			created 			: new Date()
@@ -32,10 +55,21 @@ var iva = function(router, args){
  				res.send(JSON.stringify(value));
  			}
  		});
+				}
+			})
+		}else{
+		res.status(401);
+		res.end();
+		}
+
 	});
 
-	router.put('/iva/:id', function(req, res, next) {
+	router.put('/iva/:id', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
+ 		var _acl = req.credential;
+		if(_acl.formularios[8].permisos.W){
+			args.schema.find({}, function(err, values){
+				if(!err){
  		args.schema.findById({_id : req.param('id')}, function(err, value){
  			if(!err){
 	 			value.valor 				= req.body.valor;
@@ -46,10 +80,21 @@ var iva = function(router, args){
  				});
  			}
  		})
+				}
+			})
+		}else{
+		res.status(401);
+		res.end();
+		}
+
 	});
 
-	router.delete('/iva/:id', function(req, res, next) {
+	router.delete('/iva/:id', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
+ 		var _acl = req.credential;
+		if(_acl.formularios[8].permisos.D){
+			args.schema.find({}, function(err, values){
+				if(!err){
  		args.schema.findById({_id : req.params.id}, function(err, value){
  			if(!err){
  				value.remove();
@@ -59,6 +104,13 @@ var iva = function(router, args){
 
  			res.sendStatus(500);
  		})
+				}
+			})
+		}else{
+		res.status(401);
+		res.end();
+		}
+
 	});
 
 };

@@ -92,24 +92,24 @@ var cnx = require('../connection')({
 
 //Map Route
 empresa(router, {schema : empresaSchema, instance : mongoose, security : auth});
-tipoCliente(router, {schema : tipoClienteSchema, instance : mongoose});
+tipoCliente(router, {schema : tipoClienteSchema, instance : mongoose, security : auth});
 barrio(router, {schema : barrioSchema, instance : mongoose, security : auth});
 banco(router, {schema : bancoSchema, instance : mongoose, security : auth});
 punto(router, {schema : puntoSchema, instance : mongoose});
-perfil(router, {schema : perfilSchema, instance : mongoose});
+perfil(router, {schema : perfilSchema, instance : mongoose, security : auth});
 lineaPrecio(router, {schema : lineaPrecioSchema, instance : mongoose});
 credito(router, {schema : creditoSchema, instance : mongoose});
-cargo(router, {schema : cargoSchema, instance : mongoose});
-docdependencia(router, {schema : docdependenciaSchema, instance : mongoose});
-cliente(router, {schema : clienteSchema, instance : mongoose});
+cargo(router, {schema : cargoSchema, instance : mongoose, security : auth});
+docdependencia(router, {schema : docdependenciaSchema, instance : mongoose, security : auth});
+cliente(router, {schema : clienteSchema, instance : mongoose, security : auth});
 tipoContribuyente(router, {schema : tipoContribuyenteSchema, instance : mongoose});
-iva(router,{schema : ivaSchema, instance : mongoose});
-retencion(router,{schema : retencionSchema, instance : mongoose});
-docIndice(router,{schema : docIndiceSchema, docIndice : mongoose});
-docPlantilla(router,{schema : docPlantillaSchema, docPlantilla : mongoose});
-docRuta(router,{schema : docRutaSchema, docRuta : mongoose});
-docEstado(router,{schema : docEstadoSchema, docEstado : mongoose});
-docDocumento(router,{schema : docDocumentoSchema, docDocumento : mongoose});
+iva(router,{schema : ivaSchema, instance : mongoose, security : auth});
+retencion(router,{schema : retencionSchema, instance : mongoose, security : auth});
+docIndice(router,{schema : docIndiceSchema, docIndice : mongoose, security : auth});
+docPlantilla(router,{schema : docPlantillaSchema, docPlantilla : mongoose, security : auth});
+docRuta(router,{schema : docRutaSchema, docRuta : mongoose, security : auth});
+docEstado(router,{schema : docEstadoSchema, docEstado : mongoose, security : auth});
+docDocumento(router,{schema : docDocumentoSchema, docDocumento : mongoose, security : auth});
 rol(router,{schema : rolSchema, rol : mongoose});
 
 module.exports = router;

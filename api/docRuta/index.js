@@ -1,28 +1,51 @@
 var docRuta = function(router, args){
-	router.get('/docRuta', function(req, res, next) {
+	router.get('/docRuta', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
-
+ 		var _acl = req.credential;
+		if(_acl.formularios[3].permisos.R){
+			args.schema.find({}, function(err, values){
+				if(!err){
  		args.schema.find({}, function(err, values){
  			if(!err){
 				res.send(JSON.stringify(values));	 				
  			}
 		});
+				}
+			})
+		}else{
+		res.status(401);
+		res.end();
+		}
+
 
 	});
 
-	router.get('/docRuta/:id', function(req, res, next){
+	router.get('/docRuta/:id', args.security.Auth, function(req, res, next){
  		res.setHeader('Content-Type', 'application/json');
- 		
+ 				var _acl = req.credential;
+		if(_acl.formularios[3].permisos.R){
+			args.schema.find({}, function(err, values){
+				if(!err){
  		args.schema.find({_id : req.params.id}, function(err, value){
  			if(!err){
  				res.send(JSON.stringify(value));
  			}
  		});
+				}
+			})
+		}else{
+		res.status(401);
+		res.end();
+		}
+
 	});
 
-	router.post('/docRuta', function(req, res, next) {
+	router.post('/docRuta', args.security.Auth, function(req, res, next) {
 		res.setHeader('Content-Type', 'application/json');
-
+		var _acl = req.credential;
+		if(_acl.formularios[3].permisos.W){
+			args.schema.find({}, function(err, values){
+				if(!err){
  		var _docRuta = new args.schema({
  			estado 				: req.body.estado,
  			plantilla			: req.body.plantilla,
@@ -37,27 +60,56 @@ var docRuta = function(router, args){
 
  			res.send(JSON.stringify(value));
  		});
+				}
+			})
+		}else{
+		res.status(401);
+		res.end();
+		}
+
 	});
 
-	router.put('/docRuta/:id/activado', function(req, res, next) {
+	router.put('/docRuta/:id/activado', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
- 		
+ 		var _acl = req.credential;
+		if(_acl.formularios[3].permisos.W){
+			args.schema.find({}, function(err, values){
+				if(!err){
  		args.schema.update({_id : req.params.id}, {$set : { estado : true }}, function(err, value){
  			res.send(JSON.stringify(value));
  		});
+				}
+			})
+		}else{
+		res.status(401);
+		res.end();
+		}
 	});
 
-	router.put('/docRuta/:id/desactivado', function(req, res, next) {
+	router.put('/docRuta/:id/desactivado', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
- 		
+ 		var _acl = req.credential;
+		if(_acl.formularios[3].permisos.W){
+			args.schema.find({}, function(err, values){
+				if(!err){
  		args.schema.update({_id : req.params.id}, {$set : { estado : false }}, function(err, value){
  			res.send(JSON.stringify(value));
  		});
+				}
+			})
+		}else{
+		res.status(401);
+		res.end();
+		}
+
 	});
 
-	router.put('/docRuta/:id', function(req, res, next) {
+	router.put('/docRuta/:id', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
- 		
+ 		var _acl = req.credential;
+		if(_acl.formularios[3].permisos.W){
+			args.schema.find({}, function(err, values){
+				if(!err){
  		args.schema.findOneAndUpdate({_id : req.params.id },{
 	 			estado : req.body.estado,
 	 			plantilla : req.body.plantilla,
@@ -66,10 +118,21 @@ var docRuta = function(router, args){
  		}, { new : true }, function(err, value){
 			res.send(JSON.stringify(value));
  		});
+				}
+			})
+		}else{
+		res.status(401);
+		res.end();
+		}
+
 	});
 
-	router.delete('/docRuta/:id', function(req, res, next) {
+	router.delete('/docRuta/:id', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
+ 		var _acl = req.credential;
+		if(_acl.formularios[3].permisos.W){
+			args.schema.find({}, function(err, values){
+				if(!err){
  		args.schema.findById({_id : req.params.id}, function(err, value){
  			if(!err){
  				value.remove();
@@ -79,6 +142,13 @@ var docRuta = function(router, args){
 
  			res.sendStatus(500);
  		})
+				}
+			})
+		}else{
+		res.status(401);
+		res.end();
+		}
+
 	});
 
 };

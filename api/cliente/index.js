@@ -1,19 +1,30 @@
 var cliente = function(router, args){
-	router.get('/cliente', function(req, res, next) {
+	router.get('/cliente', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
-
- 		args.schema.find({}, function(err, values){
+ 		var _acl = req.credential;
+		if(_acl.formularios[10].permisos.R){
+			args.schema.find({}, function(err, values){
+				if(!err){
+			args.schema.find({}, function(err, values){
  			if(!err){
 				res.send(JSON.stringify(values));	 				
  			}
 		});
-
+				}
+			})
+		}else{
+		res.status(401);
+		res.end();
+		}
 	});
 
-	router.get('/cliente/buscar', function(req, res, next) {
+	router.get('/cliente/buscar', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
-
- 		args.schema.find(
+ 		var _acl = req.credential;
+		if(_acl.formularios[10].permisos.R){
+			args.schema.find({}, function(err, values){
+				if(!err){
+			args.schema.find(
  			{
  				'tipoCliente._id' :req.query.tipoCliente ? JSON.parse(req.query.tipoCliente)._id : {'$ne': null }, 
  				'estado.value'    :req.query.estado ? JSON.parse(req.query.estado).value : true,
@@ -28,21 +39,41 @@ var cliente = function(router, args){
 				{representanteLegal : new RegExp(req.query.cliente ? req.query.cliente : '', 'i')},
 				{razonSocial : new RegExp(req.query.cliente ? req.query.cliente : '', 'i')}
 				]);
+				}
+			})
+		}else{
+		res.status(401);
+		res.end();
+		}
+
 	});
 
-
-	router.get('/cliente/:id', function(req, res, next){
+	router.get('/cliente/:id', args.security.Auth, function(req, res, next){
  		res.setHeader('Content-Type', 'application/json');
- 		
- 		args.schema.findOne({_id : req.params.id}, function(err, value){
+ 		var _acl = req.credential;
+		if(_acl.formularios[10].permisos.R){
+			args.schema.find({}, function(err, values){
+				if(!err){
+			args.schema.findOne({_id : req.params.id}, function(err, value){
  			if(!err){
  				res.send(JSON.stringify(value));
  			}
  		});
+				}
+			})
+		}else{
+			res.status(401);
+			res.end();
+		}
+
 	});
 
-	router.post('/cliente', function(req, res, next) {
+	router.post('/cliente', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
+ 		var _acl = req.credential;
+		if(_acl.formularios[10].permisos.W){
+			args.schema.find({}, function(err, values){
+				if(!err){
  		var _cliente = new args.schema({
  			estado 				: req.body.estado,
  			tipoDocumento 		: req.body.tipoDocumento,
@@ -66,11 +97,22 @@ var cliente = function(router, args){
 
  			res.send(JSON.stringify(value));
  		});
+				}
+			})
+		}else{
+		res.status(401);
+		res.end();
+		}
+
 	});
 
-	router.put('/cliente/:id', function(req, res, next) {
+	router.put('/cliente/:id', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
- 		args.schema.findById({_id : req.params.id}, function(err, value){
+ 		var _acl = req.credential;
+		if(_acl.formularios[10].permisos.W){
+			args.schema.find({}, function(err, values){
+				if(!err){
+			args.schema.findById({_id : req.params.id}, function(err, value){
  			if(!err){
 	 			value.estado 				 = req.body.estado,
 	 			value.tipoDocumento 		 = req.body.tipoDocumento,
@@ -89,11 +131,22 @@ var cliente = function(router, args){
  				});
  			}
  		})
+				}
+			})
+		}else{
+			res.status(401);
+			res.end();
+		}
+
 	});
 
-	router.put('/cliente/:id/activado', function(req, res, next) {
+	router.put('/cliente/:id/activado', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
- 		args.schema.findOne({_id : req.params.id}, function(err, value){
+ 		var _acl = req.credential;
+		if(_acl.formularios[10].permisos.W){
+			args.schema.find({}, function(err, values){
+				if(!err){
+			args.schema.findOne({_id : req.params.id}, function(err, value){
  			if(!err){
 	 			value.estado 		 = { value : true, name : "Activo"};
 				value.updated		 = new Date();
@@ -103,11 +156,22 @@ var cliente = function(router, args){
  				});
  			}
  		})
+				}
+			})
+		}else{
+			res.status(401);
+			res.end();
+		}
+
 	});
 
-	router.put('/cliente/:id/desactivado', function(req, res, next) {
+	router.put('/cliente/:id/desactivado', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
- 		args.schema.findOne({_id : req.params.id}, function(err, value){
+ 		var _acl = req.credential;
+		if(_acl.formularios[10].permisos.W){
+			args.schema.find({}, function(err, values){
+				if(!err){
+			args.schema.findOne({_id : req.params.id}, function(err, value){
  			if(!err){
 	 			value.estado 		 = { value : false, name : "Inactivo"};
 				value.updated		 = new Date();
@@ -117,11 +181,22 @@ var cliente = function(router, args){
  				});
  			}
  		})
+				}
+			})
+		}else{
+			res.status(401);
+			res.end();
+		}
+
 	});
 
-	router.delete('/cliente/:id', function(req, res, next) {
+	router.delete('/cliente/:id', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
- 		args.schema.findById({_id : req.param('id')}, function(err, value){
+ 		var _acl = req.credential;
+		if(_acl.formularios[10].permisos.D){
+			args.schema.find({}, function(err, values){
+				if(!err){
+			args.schema.findById({_id : req.param('id')}, function(err, value){
  			if(!err){
  				value.remove();
 				res.sendStatus(200);
@@ -130,6 +205,13 @@ var cliente = function(router, args){
 
  			res.sendStatus(500);
  		})
+				}
+			})
+		}else{
+		res.status(401);
+		res.end();
+		}
+
 	});
 
 };

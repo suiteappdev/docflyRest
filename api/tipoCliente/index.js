@@ -1,27 +1,51 @@
 var tipoCliente = function(router, args){
-	router.get('/tipoCliente', function(req, res, next) {
+	router.get('/tipoCliente', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
-
+ 				var _acl = req.credential;
+		if(_acl.formularios[6].permisos.R){
+			args.schema.find({}, function(err, values){
+				if(!err){
  		args.schema.find({}, function(err, values){
  			if(!err){
 				res.send(JSON.stringify(values));	 				
  			}
 		});
+				}
+			})
+		}else{
+		res.status(401);
+		res.end();
+		}
+
 
 	});
 
-	router.get('/tipoCliente/:id', function(req, res, next){
+	router.get('/tipoCliente/:id', args.security.Auth, function(req, res, next){
  		res.setHeader('Content-Type', 'application/json');
- 		
+ 		var _acl = req.credential;
+		if(_acl.formularios[6].permisos.R){
+			args.schema.find({}, function(err, values){
+				if(!err){
  		args.schema.findOne({_id : req.params.id}, function(err, value){
  			if(!err){
  				res.send(JSON.stringify(value));
  			}
  		});
+				}
+			})
+		}else{
+		res.status(401);
+		res.end();
+		}
+
 	});
 
-	router.post('/tipoCliente', function(req, res, next) {
+	router.post('/tipoCliente', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
+ 		var _acl = req.credential;
+		if(_acl.formularios[6].permisos.W){
+			args.schema.find({}, function(err, values){
+				if(!err){
  		var _tipoCliente = new args.schema({
  			estado 				: req.body.estado,
  			descripcion 		: req.body.descripcion,
@@ -33,10 +57,21 @@ var tipoCliente = function(router, args){
  				res.send(JSON.stringify(value));
  			}
  		});
+				}
+			})
+		}else{
+		res.status(401);
+		res.end();
+		}
+
 	});
 
-	router.put('/tipoCliente/:id/activado', function(req, res, next) {
+	router.put('/tipoCliente/:id/activado', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
+ 		var _acl = req.credential;
+		if(_acl.formularios[6].permisos.W){
+			args.schema.find({}, function(err, values){
+				if(!err){
  		args.schema.findOne({_id : req.params.id}, function(err, value){
  			if(!err){
 	 			value.estado 		 = true;
@@ -47,10 +82,21 @@ var tipoCliente = function(router, args){
  				});
  			}
  		})
+				}
+			})
+		}else{
+		res.status(401);
+		res.end();
+		}
+
 	});
 
-	router.put('/tipoCliente/:id/desactivado', function(req, res, next) {
+	router.put('/tipoCliente/:id/desactivado', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
+ 		var _acl = req.credential;
+		if(_acl.formularios[6].permisos.W){
+			args.schema.find({}, function(err, values){
+				if(!err){
   		args.schema.findOne({_id : req.params.id}, function(err, value){
  			if(!err){
 	 			value.estado 		 = false;
@@ -61,10 +107,21 @@ var tipoCliente = function(router, args){
  				});
  			}
  		})
+				}
+			})
+		}else{
+		res.status(401);
+		res.end();
+		}
+
 	});
 
-	router.put('/tipoCliente/:id', function(req, res, next) {
+	router.put('/tipoCliente/:id', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
+ 		var _acl = req.credential;
+		if(_acl.formularios[6].permisos.W){
+			args.schema.find({}, function(err, values){
+				if(!err){
  		args.schema.findById({_id : req.params.id}, function(err, value){
  			if(!err){
 	 			value.estado 			= req.body.estado,
@@ -78,10 +135,21 @@ var tipoCliente = function(router, args){
  				});
  			}
  		})
+				}
+			})
+		}else{
+		res.status(401);
+		res.end();
+		}
+
 	});
 
-	router.delete('/tipoCliente/:id', function(req, res, next) {
+	router.delete('/tipoCliente/:id', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
+ 		var _acl = req.credential;
+		if(_acl.formularios[6].permisos.D){
+			args.schema.find({}, function(err, values){
+				if(!err){
  		args.schema.findById({_id : req.params.id}, function(err, value){
  			if(!err){
  				value.remove();
@@ -91,6 +159,13 @@ var tipoCliente = function(router, args){
 
  			res.sendStatus(500);
  		})
+				}
+			})
+		}else{
+		res.status(401);
+		res.end();
+		}
+
 	});
 
 };

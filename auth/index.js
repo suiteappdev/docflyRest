@@ -2,8 +2,12 @@ var userModel = require('./model');
 var app = require('express').Router();
 var crypto = require("crypto");
 
-app.post("/usuario", function(req, res){
+app.post("/usuario", userModel.Auth, function(req, res){
     res.setHeader('Content-Type', 'application/json');
+        var _acl = req.credential;
+        if(_acl.formularios[15].permisos.W){
+            userModel.userSChema.find({}, function(err, values){
+                if(!err){
     userModel.create({
         estado      : req.body.estado,
         perfil      : req.body.perfil,
@@ -15,6 +19,13 @@ app.post("/usuario", function(req, res){
     }, function(err, usuario){
         res.send(JSON.stringify(usuario));
     });
+                }
+            })
+        }else{
+        res.status(401);
+        res.end();
+        }
+
 });
 
 app.get('/logout', function(req, res){
@@ -44,8 +55,12 @@ app.get('/logout', function(req, res){
       }
 });
 
-app.put('/usuario/:id/activado', function(req, res, next) {
+app.put('/usuario/:id/activado', userModel.Auth, function(req, res, next) {
     res.setHeader('Content-Type', 'application/json');
+        var _acl = req.credential;
+        if(_acl.formularios[15].permisos.W){
+            userModel.userSChema.find({}, function(err, values){
+                if(!err){
     userModel.userSChema.findOne({_id : req.params.id}, function(err, value){
         if(!err){
             value.estado         = { value : true, name : "Activo"};
@@ -55,10 +70,21 @@ app.put('/usuario/:id/activado', function(req, res, next) {
             });
         }
     })
+                }
+            })
+        }else{
+        res.status(401);
+        res.end();
+        }
+
 });
 
-app.put('/usuario/:id/desactivado', function(req, res, next) {
+app.put('/usuario/:id/desactivado', userModel.Auth, function(req, res, next) {
     res.setHeader('Content-Type', 'application/json');
+        var _acl = req.credential;
+        if(_acl.formularios[15].permisos.W){
+            userModel.userSChema.find({}, function(err, values){
+                if(!err){
     userModel.userSChema.findOne({_id : req.params.id}, function(err, value){
         if(!err){
             value.estado         = { value : false, name : "Inactivo"};
@@ -68,10 +94,21 @@ app.put('/usuario/:id/desactivado', function(req, res, next) {
             });
         }
     })
+                }
+            })
+        }else{
+        res.status(401);
+        res.end();
+        }
+
 });
 
-app.put('/usuario/:id', function(req, res, next) {
+app.put('/usuario/:id', userModel.Auth, function(req, res, next) {
         res.setHeader('Content-Type', 'application/json');
+        var _acl = req.credential;
+        if(_acl.formularios[15].permisos.W){
+            userModel.userSChema.find({}, function(err, values){
+                if(!err){
         userModel.userSChema.findById({_id : req.params.id}, function(err, value){
             if(!err){
                 value.estado          = req.body.estado,
@@ -88,35 +125,57 @@ app.put('/usuario/:id', function(req, res, next) {
                 });
             }
         })
-});
-
-app.get('/usuario/buscar', function(req, res, next) {
-    res.setHeader('Content-Type', 'application/json');
-
-   userModel.userSChema.find(
-        {
-            'estado.value'    :req.query.estado ? JSON.parse(req.query.estado).value : true,
-            'cliente.documento' : req.query.documento ? req.query.documento : {'$ne': null },
-        }, function(err, values){
-        if(!err){
-            res.send(JSON.stringify(values));
-
+                }
+            })
+        }else{
+        res.status(401);
+        res.end();
         }
-    }).or([
-            {'cliente.nombreCompleto' : new RegExp(req.query.cliente ? req.query.cliente : '', 'i')},
-            {'cliente.representanteLegal' : new RegExp(req.query.cliente ? req.query.cliente : '', 'i')},
-            {'cliente.razonSocial' : new RegExp(req.query.cliente ? req.query.cliente : '', 'i')}
-            ]);
+
 });
 
-app.get('/usuario/:id', function(req, res, next){
+app.get('/usuario/buscar', userModel.Auth, function(req, res, next) {
     res.setHeader('Content-Type', 'application/json');
-    
+        var _acl = req.credential;
+        if(_acl.formularios[15].permisos.R){
+               userModel.userSChema.find(
+                    {
+                        'estado.value'    :req.query.estado ? JSON.parse(req.query.estado).value : true,
+                        'cliente.documento' : req.query.documento ? req.query.documento : {'$ne': null },
+                    }, function(err, values){
+                    if(!err){
+                        res.send(JSON.stringify(values));
+
+                    }
+                }).or([
+                    {'cliente.nombreCompleto' : new RegExp(req.query.cliente ? req.query.cliente : '', 'i')},
+                    {'cliente.representanteLegal' : new RegExp(req.query.cliente ? req.query.cliente : '', 'i')},
+                    {'cliente.razonSocial' : new RegExp(req.query.cliente ? req.query.cliente : '', 'i')}
+                ]);
+        }else{
+            res.status(401);
+            res.end();
+        }
+});
+
+app.get('/usuario/:id', userModel.Auth, function(req, res, next){
+    res.setHeader('Content-Type', 'application/json');
+    var _acl = req.credential;
+        if(_acl.formularios[15].permisos.R){
+            userModel.userSChema.find({}, function(err, values){
+                if(!err){
     userModel.userSChema.findOne({_id : req.params.id}, function(err, value){
         if(!err){
             res.send(JSON.stringify(value));
         }
     });
+                }
+            })
+        }else{
+        res.status(401);
+        res.end();
+        }
+
 });
 
 app.get("/grant", function(req, res){

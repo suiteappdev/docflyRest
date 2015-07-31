@@ -59,23 +59,38 @@ var barrio = function(router, args){
 
 	router.post('/barrio', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
- 		var _barrio = new args.schema({
- 			code 				: req.body.code,
- 			nombre 				: req.body.nombre,
- 			created				: new Date(),
-			metadata			: req.body.metadata
+ 		var _acl = req.credential;
+		if(_acl.formularios[4].permisos.W){
+			args.schema.find({}, function(err, values){
+				if(!err){
+			var _barrio = new args.schema({
+	 			code 				: req.body.code,
+	 			nombre 				: req.body.nombre,
+	 			created				: new Date(),
+				metadata			: req.body.metadata
  		});
 
- 		_barrio.save(function(err, value){
+ 			_barrio.save(function(err, value){
  			if(!err){
  				res.send(JSON.stringify(value));
  			}
  		});
+				}
+			})
+		}else{
+				res.status(401);
+				res.end();
+		}
+ 		
 	});
 
 	router.put('/barrio/:id', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
- 		args.schema.findById({_id : req.params.id}, function(err, value){
+ 		var _acl = req.credential;
+		if(_acl.formularios[4].permisos.W){
+			args.schema.find({}, function(err, values){
+				if(!err){
+			args.schema.findById({_id : req.params.id}, function(err, value){
  			if(!err){
  				value.code 				= req.body.code,
  				value.nombre 				= req.body.nombre,
@@ -87,11 +102,21 @@ var barrio = function(router, args){
  				});
  			}
  		})
+				}
+			})
+		}else{
+			res.status(401);
+			res.end();
+		}
 	});
 
 	router.delete('/barrio/:id', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
- 		args.schema.findById({_id : req.params.id}, function(err, value){
+ 		var _acl = req.credential;
+		if(_acl.formularios[4].permisos.D){
+			args.schema.find({}, function(err, values){
+				if(!err){
+			args.schema.findById({_id : req.params.id}, function(err, value){
  			if(!err){
  				value.remove();
 				res.sendStatus(200);
@@ -100,6 +125,13 @@ var barrio = function(router, args){
 
  			res.sendStatus(500);
  		})
+				}
+			})
+		}else{
+			res.status(401);
+			res.end();
+		}
+
 	});
 
 };

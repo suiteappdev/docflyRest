@@ -1,27 +1,51 @@
 var retencion = function(router, args){
-	router.get('/retencion', function(req, res, next) {
+	router.get('/retencion', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
-
+ 		var _acl = req.credential;
+		if(_acl.formularios[9].permisos.R){
+			args.schema.find({}, function(err, values){
+				if(!err){
  		args.schema.find({}, function(err, values){
  			if(!err){
 				res.send(JSON.stringify(values));	 				
  			}
 		});
+				}
+			})
+		}else{
+		res.status(401);
+		res.end();
+		}
+
 
 	});
 
-	router.get('/retencion/:id', function(req, res, next){
+	router.get('/retencion/:id', args.security.Auth, function(req, res, next){
  		res.setHeader('Content-Type', 'application/json');
- 		
+ 		var _acl = req.credential;
+		if(_acl.formularios[9].permisos.R){
+			args.schema.find({}, function(err, values){
+				if(!err){
  		args.schema.find({_id : req.params.id}, function(err, value){
  			if(!err){
  				res.send(JSON.stringify(value));
  			}
  		});
+				}
+			})
+		}else{
+		res.status(401);
+		res.end();
+		}
+
 	});
 
-	router.post('/retencion', function(req, res, next) {
+	router.post('/retencion', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
+ 		var _acl = req.credential;
+		if(_acl.formularios[9].permisos.W){
+			args.schema.find({}, function(err, values){
+				if(!err){
  		var _retencion = new args.schema({
  			estado 				: req.body.estado,
  			nombre				: req.body.nombre,
@@ -36,10 +60,21 @@ var retencion = function(router, args){
  				res.send(JSON.stringify(value));
  			}
  		});
+				}
+			})
+		}else{
+		res.status(401);
+		res.end();
+		}
+
 	});
 
-		router.put('/retencion/:id/activado', function(req, res, next) {
+		router.put('/retencion/:id/activado', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
+ 		var _acl = req.credential;
+		if(_acl.formularios[9].permisos.W){
+			args.schema.find({}, function(err, values){
+				if(!err){
  		args.schema.findOne({_id : req.params.id}, function(err, value){
  			if(!err){
 	 			value.estado 		 = true;
@@ -50,10 +85,21 @@ var retencion = function(router, args){
  				});
  			}
  		})
+				}
+			})
+		}else{
+		res.status(401);
+		res.end();
+		}
+
 	});
 
-	router.put('/retencion/:id/desactivado', function(req, res, next) {
+	router.put('/retencion/:id/desactivado', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
+ 		var _acl = req.credential;
+		if(_acl.formularios[9].permisos.W){
+			args.schema.find({}, function(err, values){
+				if(!err){
   		args.schema.findOne({_id : req.params.id}, function(err, value){
  			if(!err){
 	 			value.estado 		 = false;
@@ -64,11 +110,22 @@ var retencion = function(router, args){
  				});
  			}
  		})
+				}
+			})
+		}else{
+		res.status(401);
+		res.end();
+		}
+
 	});
 
 
-	router.put('/retencion/:id', function(req, res, next) {
+	router.put('/retencion/:id', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
+ 		var _acl = req.credential;
+		if(_acl.formularios[9].permisos.W){
+			args.schema.find({}, function(err, values){
+				if(!err){
  		args.schema.findById({_id : req.params.id}, function(err, value){
  			if(!err){
 	 			value.estado 		= req.body.estado,
@@ -82,10 +139,21 @@ var retencion = function(router, args){
  				});
  			}
  		})
+				}
+			})
+		}else{
+		res.status(401);
+		res.end();
+		}
+
 	});
 
-	router.delete('/retencion/:id', function(req, res, next) {
+	router.delete('/retencion/:id', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
+ 		var _acl = req.credential;
+		if(_acl.formularios[9].permisos.D){
+			args.schema.find({}, function(err, values){
+				if(!err){
  		args.schema.findById({_id : req.params.id}, function(err, value){
  			if(!err){
  				value.remove();
@@ -95,6 +163,13 @@ var retencion = function(router, args){
 
  			res.sendStatus(500);
  		})
+				}
+			})
+		}else{
+		res.status(401);
+		res.end();
+		}
+
 	});
 
 };

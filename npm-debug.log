@@ -1,0 +1,48 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'C:\\Program Files\\nodejs\\\\node.exe',
+1 verbose cli   'C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'install',
+1 verbose cli   '-g',
+1 verbose cli   'automattic/socket.io' ]
+2 info using npm@2.7.4
+3 info using node@v0.12.2
+4 verbose node symlink C:\Program Files\nodejs\\node.exe
+5 silly cache add args [ 'automattic/socket.io', null ]
+6 verbose cache add spec automattic/socket.io
+7 silly cache add parsed spec { raw: 'automattic/socket.io',
+7 silly cache add   scope: null,
+7 silly cache add   name: null,
+7 silly cache add   rawSpec: 'automattic/socket.io',
+7 silly cache add   spec: 'git+ssh://git@github.com/automattic/socket.io.git',
+7 silly cache add   type: 'hosted',
+7 silly cache add   hosted:
+7 silly cache add    { type: 'github',
+7 silly cache add      ssh: 'git@github.com:automattic/socket.io.git',
+7 silly cache add      sshUrl: 'git+ssh://git@github.com/automattic/socket.io.git',
+7 silly cache add      httpsUrl: 'https://github.com/automattic/socket.io.git',
+7 silly cache add      directUrl: 'https://raw.githubusercontent.com/automattic/socket.io/master/package.json' } }
+8 info maybeGithub Attempting automattic/socket.io from git://github.com/automattic/socket.io.git
+9 verbose addRemoteGit git-github-com-automattic-socket-io-git-7e9f6d13 not in flight; caching
+10 verbose git clone --template=C:\Users\Administrador\AppData\Roaming\npm-cache\_git-remotes\_templates --mirror git://github.com/automattic/socket.io.git C:\Users\Administrador\AppData\Roaming\npm-cache\_git-remotes\git-github-com-automattic-socket-io-git-7e9f6d13: undefined
+10 verbose git clone --template=C:\Users\Administrador\AppData\Roaming\npm-cache\_git-remotes\_templates --mirror git://github.com/automattic/socket.io.git C:\Users\Administrador\AppData\Roaming\npm-cache\_git-remotes\git-github-com-automattic-socket-io-git-7e9f6d13: undefined
+11 info maybeGithub Couldn't clone git://github.com/automattic/socket.io.git
+12 info maybeGithub Now attempting automattic/socket.io from git@github.com:automattic/socket.io.git
+13 verbose addRemoteGit git-github-com-automattic-socket-io-git-1d0f7e3f not in flight; caching
+14 error git clone --template=C:\Users\Administrador\AppData\Roaming\npm-cache\_git-remotes\_templates --mirror git@github.com:automattic/socket.io.git C:\Users\Administrador\AppData\Roaming\npm-cache\_git-remotes\git-github-com-automattic-socket-io-git-1d0f7e3f: undefined
+14 error git clone --template=C:\Users\Administrador\AppData\Roaming\npm-cache\_git-remotes\_templates --mirror git@github.com:automattic/socket.io.git C:\Users\Administrador\AppData\Roaming\npm-cache\_git-remotes\git-github-com-automattic-socket-io-git-1d0f7e3f: undefined
+15 verbose stack Error: not found: git
+15 verbose stack     at F (C:\Program Files\nodejs\node_modules\npm\node_modules\which\which.js:40:28)
+15 verbose stack     at E (C:\Program Files\nodejs\node_modules\npm\node_modules\which\which.js:43:29)
+15 verbose stack     at C:\Program Files\nodejs\node_modules\npm\node_modules\which\which.js:54:16
+15 verbose stack     at FSReqWrap.oncomplete (fs.js:95:15)
+16 verbose cwd C:\Users\Administrador\Documents\GitHub\docflyRest
+17 error Windows_NT 6.3.9600
+18 error argv "C:\\Program Files\\nodejs\\\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "install" "-g" "automattic/socket.io"
+19 error node v0.12.2
+20 error npm  v2.7.4
+21 error code ENOGIT
+22 error not found: git
+23 error Failed using git.
+23 error This is most likely not a problem with npm itself.
+23 error Please check if you have git installed and in your PATH.
+24 verbose exit [ 1, true ]

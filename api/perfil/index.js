@@ -1,27 +1,48 @@
 var perfil = function(router, args){
-	router.get('/perfil', function(req, res, next) {
+	router.get('/perfil', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
-
- 		args.schema.find({}, function(err, values){
+ 		var _acl = req.credential;
+		if(_acl.formularios[7].permisos.R){
+			args.schema.find({}, function(err, values){
+				if(!err){
+ 			args.schema.find({}, function(err, values){
  			if(!err){
 				res.send(JSON.stringify(values));	 				
  			}
 		});
-
+				}
+			})
+		}else{
+		res.status(401);
+		res.end();
+		}
 	});
 
-	router.get('/perfil/:id', function(req, res, next){
+	router.get('/perfil/:id', args.security.Auth, function(req, res, next){
  		res.setHeader('Content-Type', 'application/json');
- 		
- 		args.schema.findOne({_id : req.param('id')}, function(err, value){
+ 		var _acl = req.credential;
+		if(_acl.formularios[7].permisos.R){
+			args.schema.find({}, function(err, values){
+				if(!err){
+ 			args.schema.findOne({_id : req.param('id')}, function(err, value){
  			if(!err){
  				res.send(JSON.stringify(value));
  			}
  		});
+				}
+			})
+		}else{
+		res.status(401);
+		res.end();
+		}
 	});
 
-	router.post('/perfil', function(req, res, next) {
+	router.post('/perfil', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
+ 		var _acl = req.credential;
+		if(_acl.formularios[7].permisos.W){
+			args.schema.find({}, function(err, values){
+				if(!err){
  		var _perfil = new args.schema({
  			nombre 				: req.body.nombre,
  			created				: new Date(),
@@ -33,10 +54,21 @@ var perfil = function(router, args){
  				res.send(JSON.stringify(value));
  			}
  		});
+				}
+			})
+		}else{
+		res.status(401);
+		res.end();
+		}
+
 	});
 
-	router.put('/perfil/:id', function(req, res, next) {
+	router.put('/perfil/:id', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
+ 		var _acl = req.credential;
+		if(_acl.formularios[7].permisos.W){
+			args.schema.find({}, function(err, values){
+				if(!err){
  		args.schema.findById({_id : req.param('id')}, function(err, value){
  			if(!err){
 	 			value.nombre 				= req.body.nombre;
@@ -48,10 +80,20 @@ var perfil = function(router, args){
  				});
  			}
  		})
+				}
+			})
+		}else{
+		res.status(401);
+		res.end();
+		}
 	});
 
-	router.delete('/perfil/:id', function(req, res, next) {
+	router.delete('/perfil/:id', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
+ 		var _acl = req.credential;
+		if(_acl.formularios[7].permisos.D){
+			args.schema.find({}, function(err, values){
+				if(!err){
  		args.schema.findById({_id : req.param('id')}, function(err, value){
  			if(!err){
  				value.remove();
@@ -61,6 +103,12 @@ var perfil = function(router, args){
 
  			res.sendStatus(500);
  		})
+				}
+			})
+		}else{
+		res.status(401);
+		res.end();
+		}
 	});
 
 };

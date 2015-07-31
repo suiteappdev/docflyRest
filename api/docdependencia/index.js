@@ -1,27 +1,50 @@
 var docdependencia = function(router, args){
-	router.get('/docdependencia', function(req, res, next) {
+	router.get('/docdependencia', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
-
- 		args.schema.find({}, function(err, values){
+ 		var _acl = req.credential;
+		if(_acl.formularios[0].permisos.R){
+			args.schema.find({}, function(err, values){
+				if(!err){
+			args.schema.find({}, function(err, values){
  			if(!err){
 				res.send(JSON.stringify(values));	 				
  			}
 		});
-
+				}
+			})
+		}else{
+		res.status(401);
+		res.end();
+		}
 	});
 
-	router.get('/docdependencia/:id', function(req, res, next){
+	router.get('/docdependencia/:id', args.security.Auth, function(req, res, next){
  		res.setHeader('Content-Type', 'application/json');
- 		
- 		args.schema.find({parent:req.param('id')}, function(err, value){
+ 		var _acl = req.credential;
+		if(_acl.formularios[0].permisos.R){
+			args.schema.find({}, function(err, values){
+				if(!err){
+			args.schema.find({parent:req.param('id')}, function(err, value){
  			if(!err){
  				res.send(JSON.stringify(value));
  			}
  		});
+				}
+			})
+		}else{
+			res.status(401);
+			res.end();
+		}
+ 		
+
 	});
 
-	router.post('/docdependencia', function(req, res, next) {
+	router.post('/docdependencia', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
+ 		var _acl = req.credential;
+		if(_acl.formularios[0].permisos.W){
+			args.schema.find({}, function(err, values){
+				if(!err){
  		var _docdependencia = new args.schema({
  			id 					: req.body.id,
  			parent				: req.body.parent ? req.body.parent : '#',
@@ -39,10 +62,21 @@ var docdependencia = function(router, args){
 
  			res.send(JSON.stringify(value));
  		});
+				}
+			})
+		}else{
+			res.status(401);
+			res.end();
+		}
+
 	});
 
-	router.put('/docdependencia/:id', function(req, res, next) {
+	router.put('/docdependencia/:id', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
+ 		var _acl = req.credential;
+		if(_acl.formularios[0].permisos.W){
+			args.schema.find({}, function(err, values){
+				if(!err){
  		args.schema.findOne({id : req.params.id}, function(err, value){
  			if(!err){
  				console.log(req.body);
@@ -54,10 +88,20 @@ var docdependencia = function(router, args){
  				});
  			}
  		})
+				}
+			})
+		}else{
+			res.status(401);
+			res.end();
+		}
 	});
 
-	router.delete('/docdependencia/:id', function(req, res, next) {
+	router.delete('/docdependencia/:id', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
+ 		var _acl = req.credential;
+		if(_acl.formularios[0].permisos.D){
+			args.schema.find({}, function(err, values){
+				if(!err){
  		args.schema.findOne({id : req.params.id}, function(err, value){
  			if(value){
  				value.remove(function(err){
@@ -72,6 +116,13 @@ var docdependencia = function(router, args){
 
  			res.sendStatus(500);
  		})
+				}
+			})
+		}else{
+		res.status(401);
+		res.end();
+		}
+
 	});
 
 };

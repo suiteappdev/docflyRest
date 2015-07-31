@@ -1,27 +1,49 @@
 var docPlantilla = function(router, args){
-	router.get('/docPlantilla', function(req, res, next) {
+	router.get('/docPlantilla', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
-
+ 		var _acl = req.credential;
+		if(_acl.formularios[2].permisos.R){
+			args.schema.find({}, function(err, values){
+				if(!err){
  		args.schema.find({}, function(err, values){
  			if(!err){
 				res.send(JSON.stringify(values));	 				
  			}
 		});
+				}
+			})
+		}else{
+		res.status(401);
+		res.end();
+		}
 
 	});
 
-	router.get('/docPlantilla/:id', function(req, res, next){
+	router.get('/docPlantilla/:id', args.security.Auth, function(req, res, next){
  		res.setHeader('Content-Type', 'application/json');
- 		
- 		args.schema.find({_id : req.params.id}, function(err, value){
+ 		var _acl = req.credential;
+		if(_acl.formularios[2].permisos.R){
+			args.schema.find({}, function(err, values){
+				if(!err){
+			args.schema.find({_id : req.params.id}, function(err, value){
  			if(!err){
  				res.send(JSON.stringify(value));
  			}
  		});
+				}
+			})
+		}else{
+		res.status(401);
+		res.end();
+		} 		
 	});
 
-	router.post('/docPlantilla', function(req, res, next) {
+	router.post('/docPlantilla', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
+ 		var _acl = req.credential;
+		if(_acl.formularios[2].permisos.W){
+			args.schema.find({}, function(err, values){
+				if(!err){
  		var _docPlantilla = new args.schema({
  			estado 				: req.body.estado,
  			nombre				: req.body.nombre,
@@ -35,10 +57,20 @@ var docPlantilla = function(router, args){
  				res.send(JSON.stringify(value));
  			}
  		});
+				}
+			})
+		}else{
+		res.status(401);
+		res.end();
+		}
 	});
 
-		router.put('/docPlantilla/:id/activado', function(req, res, next) {
+		router.put('/docPlantilla/:id/activado', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
+ 		var _acl = req.credential;
+		if(_acl.formularios[2].permisos.W){
+			args.schema.find({}, function(err, values){
+				if(!err){
  		args.schema.findOne({_id : req.params.id}, function(err, value){
  			if(!err){
 	 			value.estado 		 = true;
@@ -49,10 +81,20 @@ var docPlantilla = function(router, args){
  				});
  			}
  		})
+				}
+			})
+		}else{
+			res.status(401);
+			res.end();
+		}
 	});
 
-	router.put('/docPlantilla/:id/desactivado', function(req, res, next) {
+	router.put('/docPlantilla/:id/desactivado', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
+ 		var _acl = req.credential;
+		if(_acl.formularios[2].permisos.W){
+			args.schema.find({}, function(err, values){
+				if(!err){
   		args.schema.findOne({_id : req.params.id}, function(err, value){
  			if(!err){
 	 			value.estado 		 = false;
@@ -63,11 +105,21 @@ var docPlantilla = function(router, args){
  				});
  			}
  		})
+				}
+			})
+		}else{
+		res.status(401);
+		res.end();
+		}
 	});
 
 
-	router.put('/docPlantilla/:id', function(req, res, next) {
+	router.put('/docPlantilla/:id', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
+ 		var _acl = req.credential;
+		if(_acl.formularios[2].permisos.W){
+			args.schema.find({}, function(err, values){
+				if(!err){
  		args.schema.findById({_id : req.params.id}, function(err, value){
  			if(!err){
 	 			value.estado 		= req.body.estado,
@@ -80,10 +132,21 @@ var docPlantilla = function(router, args){
  				});
  			}
  		})
+				}
+			})
+		}else{
+			res.status(401);
+			res.end();
+		}
+
 	});
 
-	router.delete('/docPlantilla/:id', function(req, res, next) {
+	router.delete('/docPlantilla/:id', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
+ 		var _acl = req.credential;
+		if(_acl.formularios[2].permisos.W){
+			args.schema.find({}, function(err, values){
+				if(!err){
  		args.schema.findById({_id : req.params.id}, function(err, value){
  			if(!err){
  				value.remove();
@@ -93,8 +156,14 @@ var docPlantilla = function(router, args){
 
  			res.sendStatus(500);
  		})
-	});
+				}
+			})
+		}else{
+		res.status(401);
+		res.end();
+		}
 
+	});
 };
 
 module.exports = docPlantilla;

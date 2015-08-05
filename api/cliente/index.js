@@ -26,7 +26,6 @@ var cliente = function(router, args){
  			}, function(err, values){
  			if(!err){
 				res.send(JSON.stringify(values));
-
  			}
 		}).or([
 				{nombreCompleto : new RegExp(req.query.cliente ? req.query.cliente : '', 'i')},

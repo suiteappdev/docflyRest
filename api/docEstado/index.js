@@ -5,13 +5,9 @@ var docEstado = function(router, args){
 		if(_acl.formularios[14].permisos.R){
 			args.schema.find({}, function(err, values){
 				if(!err){
-		args.schema.find({}, function(err, values){
-			if(!err){
-				res.send(JSON.stringify(values));	 				
-			}
-		});
+					res.send(JSON.stringify(values));	 				
 				}
-			})
+			});
 		}else{
 			res.status(401);
 			res.end();
@@ -22,15 +18,11 @@ var docEstado = function(router, args){
 		res.setHeader('Content-Type', 'application/json');
 		var _acl = req.credential;
 		if(_acl.formularios[14].permisos.R){
-			args.schema.find({}, function(err, values){
-				if(!err){
 			args.schema.findOne({_id : req.params.id}, function(err, value){
-			if(!err){
-				res.send(JSON.stringify(value));
-			}
-		});
+				if(!err){
+					res.send(JSON.stringify(value));
 				}
-			})
+			});
 		}else{
 			res.status(401);
 			res.end();
@@ -41,21 +33,17 @@ var docEstado = function(router, args){
 		res.setHeader('Content-Type', 'application/json');
 		var _acl = req.credential;
 		if(_acl.formularios[14].permisos.W){
-			args.schema.find({}, function(err, values){
-				if(!err){
-		var _docEstado = new args.schema({
-			nombre 				: req.body.nombre,
-			gestion				: req.body.gestion,
-			created 			: new Date()
-		});
+			var _docEstado = new args.schema({
+				nombre 				: req.body.nombre,
+				gestion				: req.body.gestion,
+				created 			: new Date()
+			});
 
-		_docEstado.save(function(err, value){
-			if(!err){
-				res.send(JSON.stringify(value));
-			}
-		});
+			_docEstado.save(function(err, value){
+				if(!err){
+					res.send(JSON.stringify(value));
 				}
-			})
+			});
 		}else{
 			res.status(401);
 			res.end();

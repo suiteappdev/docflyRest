@@ -24,18 +24,14 @@ var tipoCliente = function(router, args){
  		res.setHeader('Content-Type', 'application/json');
  		var _acl = req.credential;
 		if(_acl.formularios[6].permisos.R){
-			args.schema.find({}, function(err, values){
-				if(!err){
- 		args.schema.findOne({_id : req.params.id}, function(err, value){
- 			if(!err){
- 				res.send(JSON.stringify(value));
- 			}
- 		});
-				}
-			})
+	 		args.schema.findOne({_id : req.params.id}, function(err, value){
+	 			if(!err){
+	 				res.send(JSON.stringify(value));
+	 			}
+	 		});
 		}else{
-		res.status(401);
-		res.end();
+			res.status(401);
+			res.end();
 		}
 
 	});
@@ -44,24 +40,20 @@ var tipoCliente = function(router, args){
  		res.setHeader('Content-Type', 'application/json');
  		var _acl = req.credential;
 		if(_acl.formularios[6].permisos.W){
-			args.schema.find({}, function(err, values){
-				if(!err){
- 		var _tipoCliente = new args.schema({
- 			estado 				: req.body.estado,
- 			descripcion 		: req.body.descripcion,
- 			created				: new Date()
- 		});
+		 		var _tipoCliente = new args.schema({
+		 			estado 				: req.body.estado,
+		 			descripcion 		: req.body.descripcion,
+		 			created				: new Date()
+		 		});
 
- 		_tipoCliente.save(function(err, value){
- 			if(!err){
- 				res.send(JSON.stringify(value));
- 			}
- 		});
-				}
-			})
+		 		_tipoCliente.save(function(err, value){
+		 			if(!err){
+		 				res.send(JSON.stringify(value));
+		 			}
+		 		});
 		}else{
-		res.status(401);
-		res.end();
+			res.status(401);
+			res.end();
 		}
 
 	});
@@ -117,7 +109,7 @@ var tipoCliente = function(router, args){
 		 			value.estado 			= req.body.estado,
 		 			value.descripcion 		= req.body.descripcion,
 		 			value.created			= new Date(),
-					value.metadata			= req.body.metadat
+					value.metadata			= req.body.metadata
 					value.updated			= new Date();
 
 	 				value.save(function(err, updated){
@@ -143,22 +135,17 @@ var tipoCliente = function(router, args){
  		res.setHeader('Content-Type', 'application/json');
  		var _acl = req.credential;
 		if(_acl.formularios[6].permisos.D){
-			args.schema.find({}, function(err, values){
-				if(!err){
- 		args.schema.findById({_id : req.params.id}, function(err, value){
- 			if(!err){
- 				value.remove();
-				res.sendStatus(200);
-				return;
- 			}
-
- 			res.sendStatus(500);
- 		})
-				}
-			})
+	 		args.schema.findById({_id : req.params.id}, function(err, value){
+	 			if(!err){
+	 				value.remove();
+					res.sendStatus(200);
+					return;
+	 			}
+	 			res.sendStatus(500);
+	 		})
 		}else{
-		res.status(401);
-		res.end();
+			res.status(401);
+			res.end();
 		}
 
 	});

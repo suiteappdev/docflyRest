@@ -10,6 +10,7 @@ var usuarioSchema = new schema({
     password		: String,
     permiso			: Object,
     created 		: { type: Date, default: Date.now },
+    metadata		: Object,
     update			: Date,
 });
 		

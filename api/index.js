@@ -2,6 +2,8 @@ var router = require('express').Router();
 var mongoose = require('mongoose');
 var auth = require('../auth/model');
 
+var io = require('socket.io').listen(8080);
+
 //Empresas 
 var empresa = require('./empresa');
 var empresaSchema = require('./empresa/schema')(mongoose);
@@ -85,7 +87,7 @@ var rolSchema = require('./rol/schema')(mongoose);
 var cnx = require('../connection')({
 	  user  : "armitage",
 	  pwd   : "house1989*",
-	  host  : "localhost",
+	  host  : "boruto",
 	  database : "dbposerver",
 	  port : 27017
 });
@@ -109,7 +111,7 @@ docIndice(router,{schema : docIndiceSchema, docIndice : mongoose, security : aut
 docPlantilla(router,{schema : docPlantillaSchema, docPlantilla : mongoose, security : auth});
 docRuta(router,{schema : docRutaSchema, docRuta : mongoose, security : auth});
 docEstado(router,{schema : docEstadoSchema, docEstado : mongoose, security : auth});
-docDocumento(router,{schema : docDocumentoSchema, docDocumento : mongoose, security : auth});
+docDocumento(router,{schema : docDocumentoSchema, docDocumento : mongoose, security : auth}, io);
 rol(router,{schema : rolSchema, rol : mongoose});
 
 module.exports = router;

@@ -4,17 +4,13 @@ var cliente = function(router, args){
  		var _acl = req.credential;
 		if(_acl.formularios[10].permisos.R){
 			args.schema.find({}, function(err, values){
-				if(!err){
-			args.schema.find({}, function(err, values){
- 			if(!err){
-				res.send(JSON.stringify(values));	 				
- 			}
-		});
-				}
-			})
+	 			if(!err){
+					res.send(JSON.stringify(values));	 				
+	 			}
+			});
 		}else{
-		res.status(401);
-		res.end();
+			res.status(401);
+			res.end();
 		}
 	});
 
@@ -22,8 +18,6 @@ var cliente = function(router, args){
  		res.setHeader('Content-Type', 'application/json');
  		var _acl = req.credential;
 		if(_acl.formularios[10].permisos.R){
-			args.schema.find({}, function(err, values){
-				if(!err){
 			args.schema.find(
  			{
  				'tipoCliente._id' :req.query.tipoCliente ? JSON.parse(req.query.tipoCliente)._id : {'$ne': null }, 
@@ -39,28 +33,21 @@ var cliente = function(router, args){
 				{representanteLegal : new RegExp(req.query.cliente ? req.query.cliente : '', 'i')},
 				{razonSocial : new RegExp(req.query.cliente ? req.query.cliente : '', 'i')}
 				]);
-				}
-			})
 		}else{
-		res.status(401);
-		res.end();
+			res.status(401);
+			res.end();
 		}
-
 	});
 
 	router.get('/cliente/:id', args.security.Auth, function(req, res, next){
  		res.setHeader('Content-Type', 'application/json');
  		var _acl = req.credential;
 		if(_acl.formularios[10].permisos.R){
-			args.schema.find({}, function(err, values){
-				if(!err){
 			args.schema.findOne({_id : req.params.id}, function(err, value){
- 			if(!err){
- 				res.send(JSON.stringify(value));
- 			}
- 		});
-				}
-			})
+	 			if(!err){
+	 				res.send(JSON.stringify(value));
+	 			}
+ 			});
 		}else{
 			res.status(401);
 			res.end();
@@ -74,34 +61,34 @@ var cliente = function(router, args){
 		if(_acl.formularios[10].permisos.W){
 			args.schema.find({}, function(err, values){
 				if(!err){
- 		var _cliente = new args.schema({
- 			estado 				: req.body.estado,
- 			tipoDocumento 		: req.body.tipoDocumento,
- 			documento 			: req.body.documento,
- 			nombre 				: req.body.nombre,
- 			apellido 			: req.body.apellido,
- 			nombreCompleto		: req.body.nombre && req.body.apellido ? req.body.nombre + ' ' + req.body.apellido : undefined,
- 			razonSocial 		: req.body.razonSocial,
- 			representanteLegal 	: req.body.representanteLegal,
- 			tipoCliente 		: req.body.tipoCliente,
- 			metadata			: req.body.metadata,
- 			created				: new Date()
- 		});
+			 		var _cliente = new args.schema({
+			 			estado 				: req.body.estado,
+			 			tipoDocumento 		: req.body.tipoDocumento,
+			 			documento 			: req.body.documento,
+			 			nombre 				: req.body.nombre,
+			 			apellido 			: req.body.apellido,
+			 			nombreCompleto		: req.body.nombre && req.body.apellido ? req.body.nombre + ' ' + req.body.apellido : undefined,
+			 			razonSocial 		: req.body.razonSocial,
+			 			representanteLegal 	: req.body.representanteLegal,
+			 			tipoCliente 		: req.body.tipoCliente,
+			 			metadata			: req.body.metadata,
+			 			created				: new Date()
+			 		});
 
- 		_cliente.save(function(err, value){
- 			if(err){
- 				res.status(409),
- 				res.send(err);
- 				return;
- 			}
+			 		_cliente.save(function(err, value){
+			 			if(err){
+			 				res.status(409),
+			 				res.send(err);
+			 				return;
+			 			}
 
- 			res.send(JSON.stringify(value));
- 		});
+			 			res.send(JSON.stringify(value));
+			 		});
 				}
 			})
 		}else{
-		res.status(401);
-		res.end();
+			res.status(401);
+			res.end();
 		}
 
 	});
@@ -110,29 +97,25 @@ var cliente = function(router, args){
  		res.setHeader('Content-Type', 'application/json');
  		var _acl = req.credential;
 		if(_acl.formularios[10].permisos.W){
-			args.schema.find({}, function(err, values){
-				if(!err){
 			args.schema.findById({_id : req.params.id}, function(err, value){
- 			if(!err){
-	 			value.estado 				 = req.body.estado,
-	 			value.tipoDocumento 		 = req.body.tipoDocumento,
-	 			value.documento 			 = req.body.documento,
-	 			value.nombre 				 = req.body.nombre,
-	 			value.apellido 			 = req.body.apellido,
-	 			value.nombreCompleto		 = req.body.nombreCompleto,
-	 			value.razonSocial 		 = req.body.razonSocial,
-	 			value.representanteLegal 	 = req.body.representanteLegal,
-	 			value.tipoCliente 		 = req.body.tipoCliente,
-				value.metadata		 = req.body.metadata;
-				value.updated		 = new Date();
+	 			if(!err){
+		 			value.estado 				 = req.body.estado,
+		 			value.tipoDocumento 		 = req.body.tipoDocumento,
+		 			value.documento 			 = req.body.documento,
+		 			value.nombre 				 = req.body.nombre,
+		 			value.apellido 			 	 = req.body.apellido,
+		 			value.nombreCompleto		 = req.body.nombre && req.body.apellido ? req.body.nombre + ' ' + req.body.apellido : undefined,
+		 			value.razonSocial 		     = req.body.razonSocial,
+		 			value.representanteLegal 	 = req.body.representanteLegal,
+		 			value.tipoCliente 		     = req.body.tipoCliente,
+					value.metadata		 		 = req.body.metadata;
+					value.updated		 		 = new Date();
 
- 				value.save(function(err, updated){
- 					res.send(JSON.stringify(updated));
- 				});
- 			}
- 		})
-				}
-			})
+	 				value.save(function(err, updated){
+	 					res.send(JSON.stringify(updated));
+	 				});
+	 			}
+ 			})
 		}else{
 			res.status(401);
 			res.end();
@@ -144,72 +127,58 @@ var cliente = function(router, args){
  		res.setHeader('Content-Type', 'application/json');
  		var _acl = req.credential;
 		if(_acl.formularios[10].permisos.W){
-			args.schema.find({}, function(err, values){
-				if(!err){
 			args.schema.findOne({_id : req.params.id}, function(err, value){
- 			if(!err){
-	 			value.estado 		 = { value : true, name : "Activo"};
-				value.updated		 = new Date();
+	 			if(!err){
+		 			value.estado 		 = { value : true, name : "Activo"};
+					value.updated		 = new Date();
 
- 				value.save(function(err, updated){
- 					res.send(JSON.stringify(updated));
- 				});
- 			}
- 		})
-				}
-			})
+	 				value.save(function(err, updated){
+	 					res.send(JSON.stringify(updated));
+	 				});
+	 			}
+ 			})
 		}else{
 			res.status(401);
 			res.end();
 		}
-
 	});
 
 	router.put('/cliente/:id/desactivado', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
  		var _acl = req.credential;
 		if(_acl.formularios[10].permisos.W){
-			args.schema.find({}, function(err, values){
-				if(!err){
 			args.schema.findOne({_id : req.params.id}, function(err, value){
- 			if(!err){
-	 			value.estado 		 = { value : false, name : "Inactivo"};
-				value.updated		 = new Date();
+	 			if(!err){
+		 			value.estado 		 = { value : false, name : "Inactivo"};
+					value.updated		 = new Date();
 
- 				value.save(function(err, updated){
- 					res.send(JSON.stringify(updated));
- 				});
- 			}
- 		})
-				}
-			})
+	 				value.save(function(err, updated){
+	 					res.send(JSON.stringify(updated));
+	 				});
+	 			}
+ 			})
 		}else{
 			res.status(401);
 			res.end();
 		}
-
 	});
 
 	router.delete('/cliente/:id', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
  		var _acl = req.credential;
 		if(_acl.formularios[10].permisos.D){
-			args.schema.find({}, function(err, values){
-				if(!err){
 			args.schema.findById({_id : req.param('id')}, function(err, value){
- 			if(!err){
- 				value.remove();
-				res.sendStatus(200);
-				return;
- 			}
+	 			if(!err){
+	 				value.remove();
+					res.sendStatus(200);
+					return;
+	 			}
 
- 			res.sendStatus(500);
- 		})
-				}
-			})
+ 				res.sendStatus(500);
+ 			})
 		}else{
-		res.status(401);
-		res.end();
+			res.status(401);
+			res.end();
 		}
 
 	});

@@ -5,16 +5,12 @@ var docdependencia = function(router, args){
 		if(_acl.formularios[0].permisos.R){
 			args.schema.find({}, function(err, values){
 				if(!err){
-			args.schema.find({}, function(err, values){
- 			if(!err){
-				res.send(JSON.stringify(values));	 				
- 			}
-		});
-				}
+					res.send(JSON.stringify(values));	 				
+ 				}
 			})
 		}else{
-		res.status(401);
-		res.end();
+			res.status(401);
+			res.end();
 		}
 	});
 
@@ -22,21 +18,15 @@ var docdependencia = function(router, args){
  		res.setHeader('Content-Type', 'application/json');
  		var _acl = req.credential;
 		if(_acl.formularios[0].permisos.R){
-			args.schema.find({}, function(err, values){
-				if(!err){
 			args.schema.find({parent:req.param('id')}, function(err, value){
- 			if(!err){
- 				res.send(JSON.stringify(value));
- 			}
- 		});
-				}
-			})
+	 			if(!err){
+	 				res.send(JSON.stringify(value));
+	 			}
+ 			});
 		}else{
 			res.status(401);
 			res.end();
 		}
- 		
-
 	});
 
 	router.post('/docdependencia', args.security.Auth, function(req, res, next) {
@@ -119,8 +109,8 @@ var docdependencia = function(router, args){
 				}
 			})
 		}else{
-		res.status(401);
-		res.end();
+			res.status(401);
+			res.end();
 		}
 
 	});

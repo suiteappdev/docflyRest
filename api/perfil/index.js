@@ -76,6 +76,12 @@ var perfil = function(router, args){
 				value.updated				= new Date();
 
  				value.save(function(err, updated){
+					var cliente = args.instance.model('cliente');
+					cliente.update({"metadata.perfil._id" : req.params.id} , { "metadata.perfil.nombre" : updated.nombre} , {multi: true}, function(err, doc){});
+					var usuario = args.instance.model('usuario');
+					usuario.update({"cliente.metadata.perfil._id" : req.params.id} , { "cliente.metadata.perfil.nombre" : updated.nombre} , {multi: true}, function(err, doc){});
+					var docDocumentacion = args.instance.model('docDocumentacion');
+					docDocumentacion.update({"cliente.metadata.perfil._id" : req.params.id} , { "cliente.metadata.nombre" : updated.nombre} , {multi: true}, function(err, doc){});
  					res.send(JSON.stringify(updated));
  				});
  			}

@@ -80,6 +80,12 @@ var cargo = function(router, args){
 					value.updated				= new Date();
 
  				value.save(function(err, updated){
+ 					var cliente = args.instance.model('cliente');
+					cliente.update({"metadata.cargo._id" : req.params.id} , { "tipoCliente.nombre" : updated.nombre} , {multi: true}, function(err, doc){});
+					var usuario = args.instance.model('usuario');
+					usuario.update({"cliente.metadata.cargo._id" : req.params.id} , { "cliente.metadata.cargo.nombre" : updated.descripcion} , {multi: true}, function(err, doc){});
+					var docDocumentacion = args.instance.model('docDocumentacion');
+					docDocumentacion.update({"cliente.metadata.cargo._id" : req.params.id} , { "cliente.tipoCliente.descripcion" : updated.descripcion} , {multi: true}, function(err, doc){});
  					res.send(JSON.stringify(updated));
  				});
  			}

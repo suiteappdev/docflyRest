@@ -70,23 +70,19 @@ var tipoCliente = function(router, args){
  		res.setHeader('Content-Type', 'application/json');
  		var _acl = req.credential;
 		if(_acl.formularios[6].permisos.W){
-			args.schema.find({}, function(err, values){
-				if(!err){
- 		args.schema.findOne({_id : req.params.id}, function(err, value){
- 			if(!err){
-	 			value.estado 		 = true;
-				value.updated		 = new Date();
+	 		args.schema.findOne({_id : req.params.id}, function(err, value){
+	 			if(!err){
+		 			value.estado 		 = true;
+					value.updated		 = new Date();
 
- 				value.save(function(err, updated){
- 					res.send(JSON.stringify(updated));
- 				});
- 			}
- 		})
-				}
-			})
+	 				value.save(function(err, updated){
+	 					res.send(JSON.stringify(updated));
+	 				});
+	 			}
+	 		})
 		}else{
-		res.status(401);
-		res.end();
+			res.status(401);
+			res.end();
 		}
 
 	});
@@ -95,23 +91,19 @@ var tipoCliente = function(router, args){
  		res.setHeader('Content-Type', 'application/json');
  		var _acl = req.credential;
 		if(_acl.formularios[6].permisos.W){
-			args.schema.find({}, function(err, values){
-				if(!err){
-  		args.schema.findOne({_id : req.params.id}, function(err, value){
- 			if(!err){
-	 			value.estado 		 = false;
-				value.updated		 = new Date();
+	  		args.schema.findOne({_id : req.params.id}, function(err, value){
+	 			if(!err){
+		 			value.estado 		 = false;
+					value.updated		 = new Date();
 
- 				value.save(function(err, updated){
- 					res.send(JSON.stringify(updated));
- 				});
- 			}
- 		})
-				}
-			})
+	 				value.save(function(err, updated){
+	 					res.send(JSON.stringify(updated));
+	 				});
+	 			}
+	 		})
 		}else{
-		res.status(401);
-		res.end();
+			res.status(401);
+			res.end();
 		}
 
 	});
@@ -120,28 +112,31 @@ var tipoCliente = function(router, args){
  		res.setHeader('Content-Type', 'application/json');
  		var _acl = req.credential;
 		if(_acl.formularios[6].permisos.W){
-			args.schema.find({}, function(err, values){
-				if(!err){
- 		args.schema.findById({_id : req.params.id}, function(err, value){
- 			if(!err){
-	 			value.estado 			= req.body.estado,
-	 			value.descripcion 		= req.body.descripcion,
-	 			value.created			= new Date(),
-				value.metadata			= req.body.metadat
-				value.updated			= new Date();
+	 		args.schema.findById({_id : req.params.id}, function(err, value){
+	 			if(!err){
+		 			value.estado 			= req.body.estado,
+		 			value.descripcion 		= req.body.descripcion,
+		 			value.created			= new Date(),
+					value.metadata			= req.body.metadat
+					value.updated			= new Date();
 
- 				value.save(function(err, updated){
- 					res.send(JSON.stringify(updated));
- 				});
- 			}
- 		})
-				}
-			})
+	 				value.save(function(err, updated){
+	 					if(!err){
+		 					var cliente = args.instance.model('cliente');
+							cliente.update({"tipoCliente._id" : req.params.id} , { "tipoCliente.descripcion" : updated.descripcion} , {multi: true}, function(err, doc){});
+							var usuario = args.instance.model('usuario');
+							usuario.update({"cliente.tipoCliente._id" : req.params.id} , { "cliente.tipoCliente.descripcion" : updated.descripcion} , {multi: true}, function(err, doc){});
+							var docDocumentacion = args.instance.model('docDocumentacion');
+							docDocumentacion.update({"cliente.tipoCliente._id" : req.params.id} , { "cliente.tipoCliente.descripcion" : updated.descripcion} , {multi: true}, function(err, doc){});
+							res.send(JSON.stringify(updated))	 						
+	 					}
+	 				});
+	 			}
+	 		})
 		}else{
-		res.status(401);
-		res.end();
+			res.status(401);
+			res.end();
 		}
-
 	});
 
 	router.delete('/tipoCliente/:id', args.security.Auth, function(req, res, next) {

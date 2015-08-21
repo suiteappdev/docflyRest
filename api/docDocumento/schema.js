@@ -2,6 +2,7 @@ module.exports = function(mongoose){
 	var docDocumentacionSchema = mongoose.Schema({
 	    estado			: Object,
 	    ruta			: Object,
+	    hash			: String,
 	    cliente			: Object,
 	    directorio		: String,
 	    archivo			: Number,

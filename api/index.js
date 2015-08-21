@@ -84,6 +84,8 @@ var docDocumentoSchema = require('./docDocumento/schema')(mongoose);
 var rol = require('./rol');
 var rolSchema = require('./rol/schema')(mongoose);
 
+var file = require('./file');
+
 var cnx = require('../connection')({
 	  user  : "armitage",
 	  pwd   : "house1989*",
@@ -113,5 +115,6 @@ docRuta(router,{schema : docRutaSchema, docRuta : mongoose, security : auth});
 docEstado(router,{schema : docEstadoSchema, docEstado : mongoose, security : auth});
 docDocumento(router,{schema : docDocumentoSchema, docDocumento : mongoose, security : auth}, io);
 rol(router,{schema : rolSchema, rol : mongoose});
+file(router, {security : auth});
 
 module.exports = router;

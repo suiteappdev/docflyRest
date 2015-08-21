@@ -81,6 +81,7 @@ var docDocumento = function(router, args, io){
 		 		var _docDocumento = new args.schema({
 		 			estado				: req.body.estado,
 		 			ruta				: req.body.ruta,
+		 			hash				: req.body.hash,
 		 			cliente				: req.body.cliente,
 		 			directorio			: req.body.directorio,
 		 			archivo				: req.body.archivo,
@@ -115,10 +116,12 @@ var docDocumento = function(router, args, io){
 			 			if(!err){
 			 				value.estado				= req.body.estado;
 				 			ruta						= req.body.ruta,
+				 			hash						= req.body.hash,
 				 			cliente						= req.body.cliente,
 				 			directorio					= req.body.directorio,
 				 			archivo						= req.body.archivo,
 				 			plantilla					= req.body.plantilla,
+				 			
 							value.updated				= new Date();
 
 			 				value.save(function(err, updated){
@@ -140,15 +143,11 @@ var docDocumento = function(router, args, io){
  		res.setHeader('Content-Type', 'application/json');
 		var _acl = req.credential;
 			if(_acl.formularios[13].permisos.R){
-				args.schema.find({}, function(err, values){
-					if(!err){
-						args.schema.findOne({_id : req.params.id}, function(err, value){
-				 			if(!err){
-				 				res.send(JSON.stringify(value));
-				 			}
-			 			});
-					}
-				})
+				args.schema.findOne({_id : req.params.id}, function(err, value){
+		 			if(!err){
+		 				res.send(JSON.stringify(value));
+		 			}
+	 			});
 			}else{
 				res.status(401);
 				res.end();
@@ -159,19 +158,15 @@ var docDocumento = function(router, args, io){
  		res.setHeader('Content-Type', 'application/json');
  		var _acl = req.credential;
 		if(_acl.formularios[13].permisos.R){
-			args.schema.find({}, function(err, values){
-				if(!err){
-			 		args.schema.findById({_id : req.params.id}, function(err, value){
-			 			if(!err){
-			 				value.remove();
-							res.status(200);
-							return;
-			 			}
+	 		args.schema.findById({_id : req.params.id}, function(err, value){
+	 			if(!err){
+	 				value.remove();
+					res.status(200);
+					return;
+	 			}
 
-			 			res.status(500);
-			 		})
-				}
-			})
+	 			res.status(500);
+	 		})
 		}else{
 			res.status(401);
 			res.end();

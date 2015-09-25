@@ -6,22 +6,18 @@ app.post("/usuario", userModel.Auth, function(req, res){
     res.setHeader('Content-Type', 'application/json');
         var _acl = req.credential;
         if(_acl.formularios[15].permisos.W){
-            userModel.userSChema.find({}, function(err, values){
-                if(!err){
-                    userModel.create({
-                        estado      : req.body.estado,
-                        perfil      : req.body.perfil,
-                        cliente     : req.body.cliente,
-                        usuario     : req.body.usuario,
-                        password    : req.body.password,
-                        permiso     : req.body.permiso,
-                        metadata    : req.body.metadata,
-                        empresa     : req.body.empresa
-                    }, function(err, usuario){
-                        res.send(JSON.stringify(usuario));
-                    });
-                }
-            })
+            userModel.create({
+                estado      : req.body.estado,
+                perfil      : req.body.perfil,
+                cliente     : req.body.cliente,
+                usuario     : req.body.usuario,
+                password    : req.body.password,
+                permiso     : req.body.permiso,
+                metadata    : req.body.metadata,
+                empresa     : req.body.empresa
+            }, function(err, usuario){
+                res.send(JSON.stringify(usuario));
+            });
         }else{
             res.status(401);
             res.end();
@@ -60,18 +56,14 @@ app.put('/usuario/:id/activado', userModel.Auth, function(req, res, next) {
     res.setHeader('Content-Type', 'application/json');
         var _acl = req.credential;
         if(_acl.formularios[15].permisos.W){
-            userModel.userSChema.find({}, function(err, values){
+            userModel.userSChema.findOne({_id : req.params.id}, function(err, value){
                 if(!err){
-                    userModel.userSChema.findOne({_id : req.params.id}, function(err, value){
-                        if(!err){
-                            value.estado         = { value : true, name : "Activo"};
-                            value.updated        = new Date();
+                    value.estado         = { value : true, name : "Activo"};
+                    value.updated        = new Date();
 
-                            value.save(function(err, updated){
-                                res.send(JSON.stringify(updated));
-                            });
-                        }
-                    })
+                    value.save(function(err, updated){
+                        res.send(JSON.stringify(updated));
+                    });
                 }
             })
         }else{
@@ -85,22 +77,18 @@ app.put('/usuario/:id/desactivado', userModel.Auth, function(req, res, next) {
     res.setHeader('Content-Type', 'application/json');
         var _acl = req.credential;
         if(_acl.formularios[15].permisos.W){
-            userModel.userSChema.find({}, function(err, values){
+            userModel.userSChema.findOne({_id : req.params.id}, function(err, value){
                 if(!err){
-    userModel.userSChema.findOne({_id : req.params.id}, function(err, value){
-        if(!err){
-            value.estado         = { value : false, name : "Inactivo"};
-            value.updated        = new Date();
-            value.save(function(err, updated){
-                res.send(JSON.stringify(updated));
-            });
-        }
-    })
+                    value.estado         = { value : false, name : "Inactivo"};
+                    value.updated        = new Date();
+                    value.save(function(err, updated){
+                        res.send(JSON.stringify(updated));
+                    });
                 }
             })
         }else{
-        res.status(401);
-        res.end();
+            res.status(401);
+            res.end();
         }
 
 });
@@ -109,25 +97,38 @@ app.put('/usuario/:id', userModel.Auth, function(req, res, next) {
         res.setHeader('Content-Type', 'application/json');
         var _acl = req.credential;
         if(_acl.formularios[15].permisos.W){
-            userModel.userSChema.find({}, function(err, values){
+            userModel.userSChema.findById({_id : req.params.id}, function(err, value){
                 if(!err){
-                    userModel.userSChema.findById({_id : req.params.id}, function(err, value){
-                        if(!err){
-                            value.estado          = req.body.estado,
-                            value.perfil          = req.body.perfil,
-                            value.cliente         = req.body.cliente,
-                            value.usuario         = req.body.usuario,
-                            value.password        = req.body.password,
-                            value.permiso         = req.body.permiso,
-                            value.metadata        = req.body.metadata,
-                            value.empresa         = req.body.empresa,
-                            value.updated         = new Date();
+                    if(req.body.password){
+                        value.estado          = req.body.estado,
+                        value.perfil          = req.body.perfil,
+                        value.cliente         = req.body.cliente,
+                        value.usuario         = req.body.usuario,
+                        value.password        =  crypto.createHmac('sha1', "house1989*").update(req.body.password).digest("hex"),
+                        value.permiso         = req.body.permiso,
+                        value.metadata        = req.body.metadata,
+                        value.empresa         = req.body.empresa,
+                        value.updated         = new Date();
 
-                            value.save(function(err, updated){
-                                res.send(JSON.stringify(updated));
-                            });
-                        }
-                    })
+                        value.save(function(err, updated){
+                            updated.password = undefined;
+                            res.send(JSON.stringify(updated));
+                        });                    
+                    }else{
+                        value.estado          = req.body.estado,
+                        value.perfil          = req.body.perfil,
+                        value.cliente         = req.body.cliente,
+                        value.usuario         = req.body.usuario,
+                        value.permiso         = req.body.permiso,
+                        value.metadata        = req.body.metadata,
+                        value.empresa         = req.body.empresa,
+                        value.updated         = new Date(); 
+
+                        value.save(function(err, updated){
+                            updated.password = undefined;
+                            res.send(JSON.stringify(updated));
+                        }); 
+                    }
                 }
             })
         }else{
@@ -166,6 +167,8 @@ app.get('/usuario/:id', userModel.Auth, function(req, res, next){
         if(_acl.formularios[15].permisos.R){
             userModel.userSChema.findOne({_id : req.params.id}, function(err, value){
                 if(!err){
+                    value.password = undefined;
+                    console.log(value);
                     res.send(JSON.stringify(value));
                 }
             });

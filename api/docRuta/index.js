@@ -3,20 +3,15 @@ var docRuta = function(router, args){
  		res.setHeader('Content-Type', 'application/json');
  		var _acl = req.credential;
 		if(_acl.formularios[3].permisos.R){
-			args.schema.find({}, function(err, values){
-				if(!err){
- 		args.schema.find({}, function(err, values){
- 			if(!err){
-				res.send(JSON.stringify(values));	 				
- 			}
-		});
+ 			args.schema.find({}, function(err, values){
+	 			if(!err){
+					res.send(JSON.stringify(values));	 				
 				}
 			})
 		}else{
-		res.status(401);
-		res.end();
+			res.status(401);
+			res.end();
 		}
-
 
 	});
 
@@ -24,34 +19,27 @@ var docRuta = function(router, args){
  		res.setHeader('Content-Type', 'application/json');
  				var _acl = req.credential;
 		if(_acl.formularios[3].permisos.R){
-			args.schema.find({}, function(err, values){
-				if(!err){
- 		args.schema.find({_id : req.params.id}, function(err, value){
- 			if(!err){
- 				res.send(JSON.stringify(value));
- 			}
- 		});
-				}
-			})
+	 		args.schema.find({_id : req.params.id}, function(err, value){
+	 			if(!err){
+	 				res.send(JSON.stringify(value));
+	 			}
+	 		});
 		}else{
-		res.status(401);
-		res.end();
+			res.status(401);
+			res.end();
 		}
-
 	});
 
 	router.post('/docRuta', args.security.Auth, function(req, res, next) {
 		res.setHeader('Content-Type', 'application/json');
 		var _acl = req.credential;
 		if(_acl.formularios[3].permisos.W){
-			args.schema.find({}, function(err, values){
-				if(!err){
- 		var _docRuta = new args.schema({
- 			estado 				: req.body.estado,
- 			plantilla			: req.body.plantilla,
- 			path				: req.body.path,
- 			created 			: new Date(),
- 		});
+	 		var _docRuta = new args.schema({
+	 			estado 				: req.body.estado,
+	 			plantilla			: req.body.plantilla,
+	 			path				: req.body.path,
+	 			created 			: new Date(),
+	 		});
 
  		_docRuta.save(function(err, value){
  			if(err){
@@ -60,11 +48,9 @@ var docRuta = function(router, args){
 
  			res.send(JSON.stringify(value));
  		});
-				}
-			})
 		}else{
-		res.status(401);
-		res.end();
+			res.status(401);
+			res.end();
 		}
 
 	});
@@ -73,16 +59,12 @@ var docRuta = function(router, args){
  		res.setHeader('Content-Type', 'application/json');
  		var _acl = req.credential;
 		if(_acl.formularios[3].permisos.W){
-			args.schema.find({}, function(err, values){
-				if(!err){
- 		args.schema.update({_id : req.params.id}, {$set : { estado : true }}, function(err, value){
- 			res.send(JSON.stringify(value));
- 		});
-				}
-			})
+	 		args.schema.update({_id : req.params.id}, {$set : { estado : true }}, function(err, value){
+	 			res.send(JSON.stringify(value));
+	 		});
 		}else{
-		res.status(401);
-		res.end();
+			res.status(401);
+			res.end();
 		}
 	});
 
@@ -90,65 +72,51 @@ var docRuta = function(router, args){
  		res.setHeader('Content-Type', 'application/json');
  		var _acl = req.credential;
 		if(_acl.formularios[3].permisos.W){
-			args.schema.find({}, function(err, values){
-				if(!err){
- 		args.schema.update({_id : req.params.id}, {$set : { estado : false }}, function(err, value){
- 			res.send(JSON.stringify(value));
- 		});
-				}
-			})
+	 		args.schema.update({_id : req.params.id}, {$set : { estado : false }}, function(err, value){
+	 			res.send(JSON.stringify(value));
+	 		});
 		}else{
-		res.status(401);
-		res.end();
+			res.status(401);
+			res.end();
 		}
-
 	});
 
 	router.put('/docRuta/:id', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
  		var _acl = req.credential;
 		if(_acl.formularios[3].permisos.W){
-			args.schema.find({}, function(err, values){
-				if(!err){
- 		args.schema.findOneAndUpdate({_id : req.params.id },{
-	 			estado : req.body.estado,
-	 			plantilla : req.body.plantilla,
-	 			path : req.body.path,
-	 			updated : new Date()
- 		}, { new : true }, function(err, value){
-			res.send(JSON.stringify(value));
- 		});
-				}
-			})
+	 		args.schema.findOneAndUpdate({_id : req.params.id },{
+		 			estado : req.body.estado,
+		 			plantilla : req.body.plantilla,
+		 			path : req.body.path,
+		 			updated : new Date()
+	 		}, { new : true }, function(err, value){
+				res.send(JSON.stringify(value));
+	 		});
+	 		
 		}else{
-		res.status(401);
-		res.end();
+			res.status(401);
+			res.end();
 		}
-
 	});
 
 	router.delete('/docRuta/:id', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
  		var _acl = req.credential;
 		if(_acl.formularios[3].permisos.W){
-			args.schema.find({}, function(err, values){
-				if(!err){
- 		args.schema.findById({_id : req.params.id}, function(err, value){
- 			if(!err){
- 				value.remove();
-				res.sendStatus(200);
-			return;
- 			}
+	 		args.schema.findById({_id : req.params.id}, function(err, value){
+	 			if(!err){
+	 				value.remove();
+					res.sendStatus(200);
+				return;
+	 			}
 
- 			res.sendStatus(500);
- 		})
-				}
-			})
+	 			res.sendStatus(500);
+	 		})
 		}else{
-		res.status(401);
-		res.end();
+			res.status(401);
+			res.end();
 		}
-
 	});
 
 };

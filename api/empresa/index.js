@@ -41,22 +41,15 @@ var empresa = function(router, args){
  		var _acl = req.credential;
 
  			if(_acl.formularios[11].permisos.R){
-				args.schema.find({}, function(err, values){
-		 			if(!err){
-	 					args.schema.findOne({_id : req.param('id')}, function(err, value){
- 						if(!err){
- 				res.send(JSON.stringify(value));
- 			}
- 		});
-		 			}
-				})
+ 					args.schema.findOne({_id : req.params.id}, function(err, value){
+						if(!err){
+	 						res.send(JSON.stringify(value));
+	 					}
+ 					});
  			}else{
 				res.status(401)
  			}
- 
 	});
-
-
 
 	router.post('/empresa', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
@@ -110,7 +103,7 @@ router.put('/empresa/:id/activado', args.security.Auth, function(req, res, next)
 				}
 			})
 		}else{
-		res.status(401)
+			res.status(401)
 		}
 
 	});
@@ -145,9 +138,7 @@ router.put('/empresa/:id/activado', args.security.Auth, function(req, res, next)
  		var _acl = req.credential;
 
 		if(_acl.formularios[11].permisos.W){
-			args.schema.find({}, function(err, values){
-				if(!err){
-				args.schema.findById({_id : req.param('id')}, function(err, value){
+				args.schema.findById({_id : req.params.id}, function(err, value){
 		 			if(!err){
 		 			value.estado				= req.body.estado,
 		 			value.nombre 				= req.body.nombre,
@@ -160,16 +151,25 @@ router.put('/empresa/:id/activado', args.security.Auth, function(req, res, next)
 					value.metadata				= req.body.metadata
 
 		 				value.save(function(err, updated){
-		 					res.send(JSON.stringify(updated));
+		 					if(!err){
+			 					var cliente = args.instance.model('cliente');
+			 					cliente.update({"metadata.empresa._id" : updated._id} , { "metadata.empresa" : updated} , {multi: true}, function(err, doc){
+		 					
+			 					});
+
+								var usuario = args.instance.model('usuario');
+								usuario.update({"cliente.metadata.empresa._id" : updated._id} , { "cliente.metadata.empresa" : updated} , {multi: true}, function(err, empresa){
+									console.log(empresa);
+								});	
+								
+								res.send(JSON.stringify(updated)) 						
+	 						}
 		 				});
 		 			}
-	 		})
-					}
-			})
-				}else{
-				res.status(401)
-				}
-
+	 			})
+			}else{
+					res.status(401)
+			}
 	});
 
 	router.delete('/empresa/:id', args.security.Auth, function(req, res, next) {

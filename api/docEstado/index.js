@@ -61,11 +61,16 @@ var docEstado = function(router, args){
 				value.updated				= new Date();
 
 				value.save(function(err, updated){
-					var docDocumentacion = args.instance.model('docDocumentacion');
-					docDocumentacion.update({"estado._id" : req.params.id} , { "estado.nombre" : updated.nombre , "gestion" : update.gestion} , {multi: true}, function(err, doc){});
-					var usuario = args.instance.model('usuario');
-					usuario.update({"metadata.estadoDocumento._id" : req.params.id} , { $set:{"estadoDocumento.$.nombre" : updated.nombre} } , {multi: true}, function(err, doc){});
-					res.send(JSON.stringify(updated));
+					if(!err){
+						//actualizar estado de la documentacion
+						var docDocumentacion = args.instance.model('docDocumentacion');
+						docDocumentacion.update({"estado._id" : req.params.id} , { "estado.nombre" : updated.nombre , gestion : updated.gestion} , {multi: true}, function(err, doc){});
+						
+						//actualizar estados asociados al usuario
+						var usuario = args.instance.model('usuario');
+						usuario.update({"metadata.estadoDocumento._id" : req.params.id} , { $set:{"metadata.estadoDocumento.$.nombre" : updated.nombre} } , {multi: true}, function(err, doc){});
+						res.send(JSON.stringify(updated));						
+					}
 				});
 			})
 		}else{

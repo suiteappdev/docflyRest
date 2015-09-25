@@ -84,6 +84,10 @@ var docDocumentoSchema = require('./docDocumento/schema')(mongoose);
 var rol = require('./rol');
 var rolSchema = require('./rol/schema')(mongoose);
 
+//Consecutivo
+var consecutivo = require('./consecutivo');
+var consecutivoSchema = require('./consecutivo/schema')(mongoose);
+
 var file = require('./file');
 
 var cnx = require('../connection')({
@@ -109,11 +113,12 @@ cliente(router, {schema : clienteSchema, instance : mongoose, security : auth});
 tipoContribuyente(router, {schema : tipoContribuyenteSchema, instance : mongoose});
 iva(router,{schema : ivaSchema, instance : mongoose, security : auth});
 retencion(router,{schema : retencionSchema, instance : mongoose, security : auth});
-docIndice(router,{schema : docIndiceSchema, docIndice : mongoose, security : auth});
-docPlantilla(router,{schema : docPlantillaSchema, docPlantilla : mongoose, security : auth});
-docRuta(router,{schema : docRutaSchema, docRuta : mongoose, security : auth});
-docEstado(router,{schema : docEstadoSchema, docEstado : mongoose, security : auth});
-docDocumento(router,{schema : docDocumentoSchema, docDocumento : mongoose, security : auth}, io);
+docIndice(router,{schema : docIndiceSchema, instance : mongoose, security : auth});
+docPlantilla(router,{schema : docPlantillaSchema, instance : mongoose, security : auth});
+docRuta(router,{schema : docRutaSchema, instance : mongoose, security : auth});
+docEstado(router,{schema : docEstadoSchema, instance : mongoose, security : auth});
+docDocumento(router,{schema : docDocumentoSchema, instance : mongoose, security : auth}, io);
+consecutivo(router,{schema : consecutivoSchema, instance : mongoose, security : auth});
 rol(router,{schema : rolSchema, rol : mongoose});
 file(router, {security : auth});
 

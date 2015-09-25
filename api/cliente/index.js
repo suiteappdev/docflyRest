@@ -111,7 +111,21 @@ var cliente = function(router, args){
 					value.updated		 		 = new Date();
 
 	 				value.save(function(err, updated){
-	 					res.send(JSON.stringify(updated));
+						if(!err){
+							//actualizar cliente en la coleccion docDocumentacion
+							var docDocumentacion = args.instance.model('docDocumentacion');
+							docDocumentacion.update({"cliente._id" : updated._id} , {"cliente":updated} , {multi: true}, function(err, doc){
+								console.log("Cliente en documentacion", doc);
+							});
+							
+							//actualizar el cliente en coleccion usuario
+							var usuario = args.instance.model('usuario');
+							usuario.update({"cliente._id" : updated._id} , {"cliente":updated} , {multi: true}, function(err, doc){
+								console.log("cliente en usuario", doc);
+							});
+
+							res.send(JSON.stringify(updated));						
+						}
 	 				});
 	 			}
  			})

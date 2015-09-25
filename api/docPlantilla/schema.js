@@ -3,6 +3,9 @@ module.exports = function(mongoose){
 	    estado  		: Boolean,
 	    nombre			: String,
 	    indice			: Object,
+	    cliente			: Boolean,
+	    expira			: Object,
+	    metadata		: Object,
 	    created 		: { type: Date, default: Date.now }
 	});
 

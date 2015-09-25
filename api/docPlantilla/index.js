@@ -3,38 +3,29 @@ var docPlantilla = function(router, args){
  		res.setHeader('Content-Type', 'application/json');
  		var _acl = req.credential;
 		if(_acl.formularios[2].permisos.R){
-			args.schema.find({}, function(err, values){
-				if(!err){
- 		args.schema.find({}, function(err, values){
- 			if(!err){
-				res.send(JSON.stringify(values));	 				
- 			}
-		});
-				}
-			})
+	 		args.schema.find({}, function(err, values){
+	 			if(!err){
+					res.send(JSON.stringify(values));	 				
+	 			}
+			});
 		}else{
-		res.status(401);
-		res.end();
+			res.status(401);
+			res.end();
 		}
-
 	});
 
 	router.get('/docPlantilla/:id', args.security.Auth, function(req, res, next){
  		res.setHeader('Content-Type', 'application/json');
  		var _acl = req.credential;
 		if(_acl.formularios[2].permisos.R){
-			args.schema.find({}, function(err, values){
-				if(!err){
 			args.schema.find({_id : req.params.id}, function(err, value){
- 			if(!err){
- 				res.send(JSON.stringify(value));
- 			}
- 		});
-				}
-			})
+	 			if(!err){
+	 				res.send(JSON.stringify(value));
+	 			}
+	 		});
 		}else{
-		res.status(401);
-		res.end();
+			res.status(401);
+			res.end();
 		} 		
 	});
 
@@ -48,6 +39,8 @@ var docPlantilla = function(router, args){
  			estado 				: req.body.estado,
  			nombre				: req.body.nombre,
  			indice				: req.body.indice,
+ 			cliente				: req.body.cliente,
+ 			expira				: {expira : req.body.expira , value : ''},
  			created 			: new Date(),
 			metadata			: req.body.metadata
  		});
@@ -60,28 +53,24 @@ var docPlantilla = function(router, args){
 				}
 			})
 		}else{
-		res.status(401);
-		res.end();
+			res.status(401);
+			res.end();
 		}
 	});
 
-		router.put('/docPlantilla/:id/activado', args.security.Auth, function(req, res, next) {
+	router.put('/docPlantilla/:id/activado', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
  		var _acl = req.credential;
 		if(_acl.formularios[2].permisos.W){
-			args.schema.find({}, function(err, values){
-				if(!err){
- 		args.schema.findOne({_id : req.params.id}, function(err, value){
- 			if(!err){
-	 			value.estado 		 = true;
-				value.updated		 = new Date();
+	 		args.schema.findOne({_id : req.params.id}, function(err, value){
+	 			if(!err){
+		 			value.estado 		 = true;
+					value.updated		 = new Date();
 
- 				value.save(function(err, updated){
- 					res.send(JSON.stringify(updated));
- 				});
- 			}
- 		})
-				}
+	 				value.save(function(err, updated){
+	 					res.send(JSON.stringify(updated));
+	 				});
+	 			}
 			})
 		}else{
 			res.status(401);
@@ -93,23 +82,19 @@ var docPlantilla = function(router, args){
  		res.setHeader('Content-Type', 'application/json');
  		var _acl = req.credential;
 		if(_acl.formularios[2].permisos.W){
-			args.schema.find({}, function(err, values){
-				if(!err){
-  		args.schema.findOne({_id : req.params.id}, function(err, value){
- 			if(!err){
-	 			value.estado 		 = false;
-				value.updated		 = new Date();
+	  		args.schema.findOne({_id : req.params.id}, function(err, value){
+	 			if(!err){
+		 			value.estado 		 = false;
+					value.updated		 = new Date();
 
- 				value.save(function(err, updated){
- 					res.send(JSON.stringify(updated));
- 				});
- 			}
- 		})
-				}
-			})
+	 				value.save(function(err, updated){
+	 					res.send(JSON.stringify(updated));
+	 				});
+	 			}
+	 		})
 		}else{
-		res.status(401);
-		res.end();
+			res.status(401);
+			res.end();
 		}
 	});
 
@@ -118,49 +103,43 @@ var docPlantilla = function(router, args){
  		res.setHeader('Content-Type', 'application/json');
  		var _acl = req.credential;
 		if(_acl.formularios[2].permisos.W){
-			args.schema.find({}, function(err, values){
-				if(!err){
- 		args.schema.findById({_id : req.params.id}, function(err, value){
- 			if(!err){
-	 			value.estado 		= req.body.estado,
-	 			value.nombre		= req.body.nombre,
-	 			value.indice			= req.body.indice,
-				value.updated		= new Date();
+	 		args.schema.findById({_id : req.params.id}, function(err, value){
+	 			if(!err){
+		 			value.estado 		= req.body.estado,
+		 			value.nombre		= req.body.nombre,
+		 			value.indice		= req.body.indice,
+		 			value.expira 		= req.body.expira,
+		 			value.cliente 		= req.body.cliente,
+		 			value.metadata 		= req.body.metadata,
+					value.updated		= new Date();
 
- 				value.save(function(err, updated){
- 					res.send(JSON.stringify(updated));
- 				});
- 			}
- 		})
-				}
-			})
+	 				value.save(function(err, updated){
+	 					res.send(JSON.stringify(updated));
+	 				});
+	 			}
+	 		})
 		}else{
 			res.status(401);
 			res.end();
 		}
-
 	});
 
 	router.delete('/docPlantilla/:id', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
  		var _acl = req.credential;
 		if(_acl.formularios[2].permisos.W){
-			args.schema.find({}, function(err, values){
-				if(!err){
- 		args.schema.findById({_id : req.params.id}, function(err, value){
- 			if(!err){
- 				value.remove();
-				res.sendStatus(200);
-			return;
- 			}
+	 		args.schema.findById({_id : req.params.id}, function(err, value){
+	 			if(!err){
+	 				value.remove();
+					res.sendStatus(200);
+				return;
+	 			}
 
- 			res.sendStatus(500);
- 		})
-				}
-			})
+	 			res.sendStatus(500);
+	 		})
 		}else{
-		res.status(401);
-		res.end();
+			res.status(401);
+			res.end();
 		}
 
 	});

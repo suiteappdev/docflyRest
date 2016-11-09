@@ -1,8 +1,9 @@
 module.exports = function(mongoose){
+	var schema = mongoose.Schema;
 	var docPlantillaSchema = mongoose.Schema({
 	    estado  		: Boolean,
 	    nombre			: String,
-	    indice			: Object,
+	    indice			: [{ type : schema.Types.ObjectId , ref : 'docIndice'}],
 	    cliente			: Boolean,
 	    expira			: Object,
 	    metadata		: Object,

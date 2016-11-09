@@ -1,9 +1,10 @@
+var mongoose = require("mongoose");
 var docPlantilla = function(router, args){
 	router.get('/docPlantilla', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
  		var _acl = req.credential;
 		if(_acl.formularios[2].permisos.R){
-	 		args.schema.find({}, function(err, values){
+	 		args.schema.find().populate("indice").exec(function(err, values){
 	 			if(!err){
 					res.send(JSON.stringify(values));	 				
 	 			}
@@ -18,7 +19,7 @@ var docPlantilla = function(router, args){
  		res.setHeader('Content-Type', 'application/json');
  		var _acl = req.credential;
 		if(_acl.formularios[2].permisos.R){
-			args.schema.find({_id : req.params.id}, function(err, value){
+			args.schema.find({_id : req.params.id}).populate("indice")(function(err, value){
 	 			if(!err){
 	 				res.send(JSON.stringify(value));
 	 			}
@@ -34,22 +35,28 @@ var docPlantilla = function(router, args){
  		var _acl = req.credential;
 		if(_acl.formularios[2].permisos.W){
 			args.schema.find({}, function(err, values){
-				if(!err){
- 		var _docPlantilla = new args.schema({
- 			estado 				: req.body.estado,
- 			nombre				: req.body.nombre,
- 			indice				: req.body.indice,
- 			cliente				: req.body.cliente,
- 			expira				: {expira : req.body.expira , value : ''},
- 			created 			: new Date(),
-			metadata			: req.body.metadata
- 		});
+			if(!err){
+					if(req.body.indice){
+						for(x in req.body.indice){
+							req.body.indice[x] = mongoose.Types.ObjectId(req.body.indice[x]);
+						}
+					}
 
- 		_docPlantilla.save(function(err, value){
- 			if(!err){
- 				res.send(JSON.stringify(value));
- 			}
- 		});
+		 		var _docPlantilla = new args.schema({
+		 			estado 				: req.body.estado,
+		 			nombre				: req.body.nombre,
+		 			indice				: req.body.indice,
+		 			cliente				: req.body.cliente,
+		 			expira				: {expira : req.body.expira , value : ''},
+		 			created 			: new Date(),
+					metadata			: req.body.metadata
+		 		});
+
+		 		_docPlantilla.save(function(err, value){
+		 			if(!err){
+		 				res.send(JSON.stringify(value));
+		 			}
+		 		});
 				}
 			})
 		}else{
@@ -104,6 +111,12 @@ var docPlantilla = function(router, args){
  		var _acl = req.credential;
 		if(_acl.formularios[2].permisos.W){
 	 		args.schema.findById({_id : req.params.id}, function(err, value){
+				if(req.body.indice){
+					for(x in req.body.indice){
+						req.body.indice[x] = mongoose.Types.ObjectId(req.body.indice[x]);
+					}
+				}
+
 	 			if(!err){
 		 			value.estado 		= req.body.estado,
 		 			value.nombre		= req.body.nombre,

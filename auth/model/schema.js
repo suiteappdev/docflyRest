@@ -11,6 +11,8 @@ var usuarioSchema = new Schema({
     permiso			: Object,
     created 		: { type: Date, default: Date.now },
     metadata		: Object,
+    misPlantillas   : [{ type : Schema.Types.ObjectId , ref : 'docRuta'}],
+    misEstados   : [{ type : Schema.Types.ObjectId , ref : 'docEstado'}],
     update			: Date,
 });
 		

@@ -1,11 +1,12 @@
+var mongoose = require("mongoose");
 var docRuta = function(router, args){
 	router.get('/docRuta', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
  		var _acl = req.credential;
 		if(_acl.formularios[3].permisos.R){
- 			args.schema.find({}, function(err, values){
+ 			args.schema.find().populate("plantilla").exec(function(err, values){
 	 			if(!err){
-					res.send(JSON.stringify(values));	 				
+					res.status(200).json(values);	 				
 				}
 			})
 		}else{
@@ -19,9 +20,9 @@ var docRuta = function(router, args){
  		res.setHeader('Content-Type', 'application/json');
  				var _acl = req.credential;
 		if(_acl.formularios[3].permisos.R){
-	 		args.schema.find({_id : req.params.id}, function(err, value){
+	 		args.schema.find({_id : req.params.id}).populate("plantilla").exec(function(err, value){
 	 			if(!err){
-	 				res.send(JSON.stringify(value));
+	 				res.status(200).json(value);
 	 			}
 	 		});
 		}else{
@@ -34,6 +35,10 @@ var docRuta = function(router, args){
 		res.setHeader('Content-Type', 'application/json');
 		var _acl = req.credential;
 		if(_acl.formularios[3].permisos.W){
+			if(req.body.plantilla){
+				req.body.plantilla = mongoose.Types.ObjectId(req.body.plantilla);
+			}
+
 	 		var _docRuta = new args.schema({
 	 			estado 				: req.body.estado,
 	 			plantilla			: req.body.plantilla,
@@ -46,7 +51,7 @@ var docRuta = function(router, args){
  				res.sendStatus(409);
  			}
 
- 			res.send(JSON.stringify(value));
+ 			res.status(200).json(value);
  		});
 		}else{
 			res.status(401);
@@ -85,6 +90,11 @@ var docRuta = function(router, args){
  		res.setHeader('Content-Type', 'application/json');
  		var _acl = req.credential;
 		if(_acl.formularios[3].permisos.W){
+			
+			if(req.body.plantilla){
+				req.body.plantilla = mongoose.Types.ObjectId(req.body.plantilla);
+			}
+
 	 		args.schema.findOneAndUpdate({_id : req.params.id },{
 		 			estado : req.body.estado,
 		 			plantilla : req.body.plantilla,

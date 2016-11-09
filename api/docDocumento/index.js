@@ -81,7 +81,7 @@ var docDocumento = function(router, args, io){
 		 				_criteria = {"plantilla.indice.value" : { $gte : req.query.indiceIni, $lte :req.query.indiceEnd}};
 		 			}
 
-	 				args.schema.find(_criteria).populate("plantilla.cliente", null, 'cliente').exec( function(err, values){
+	 				args.schema.find(_criteria).populate("plantilla.cliente", null, 'cliente').populate("usuario").exec( function(err, values){
 			 			if(!err){
 							res.send(JSON.stringify(values));
 			 			}

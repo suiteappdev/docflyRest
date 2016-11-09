@@ -83,46 +83,6 @@ var docIndice = function(router, args){
 
 	 				value.save(function(err, updated){
 	 					if(!err){
-	 						//actualizar indice en documentacion
-							var docDocumentacion = args.instance.model('docDocumentacion');
-		 					docDocumentacion.update({"plantilla.indice._id" : req.params.id} ,
-		 					 	{$set:
-		 					 		{
-		 					 			"indice.$.nombre": updated.nombre,
-		 								"indice.$.nombre": updated.nombre,
-		 								"indice.$.tipo": updated.tipo,
-		 								"indice.$.editable": updated.editable,
-		 								"indice.$.requerido": updated.requerido,
-		 								"indice.$.longitud": updated.longitud,
-		 							}
-		 					 		}
-		 					 	, {multi: true}).exec();
-
-							var docPlantilla = args.instance.model('docPlantilla');
-		 					docPlantilla.update({"indice._id" : req.params.id} , 
-		 						{$set:
-		 							{
-		 								"indice.$.nombre": updated.nombre,
-		 								"indice.$.tipo": updated.tipo,
-		 								"indice.$.editable": updated.editable,
-		 								"indice.$.requerido": updated.requerido,
-		 								"indice.$.longitud": updated.longitud,
-		 							}
-		 						} , {multi: true}).exec();
-
-							var docRuta = args.instance.model('docRuta');
-		 					docRuta.update({"plantilla.indice._id" : req.params.id} ,
-		 						{$set:
-		 							{
-		 								"plantilla.indice.$.nombre": updated.nombre,
-		 								"plantilla.indice.$.tipo": updated.tipo,
-		 								"plantilla.indice.$.editable": updated.editable,
-		 								"plantilla.indice.$.requerido": updated.requerido,
-		 								"plantilla.indice.$.longitud": updated.longitud,
-		 							}
-		 						}, {multi: true}).exec();
-
-							
 							res.send(JSON.stringify(updated));	 						
 	 					}
 	 				});

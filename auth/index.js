@@ -7,6 +7,19 @@ app.post("/usuario", userModel.Auth, function(req, res){
     res.setHeader('Content-Type', 'application/json');
         var _acl = req.credential;
         if(_acl.formularios[15].permisos.W){
+
+            if(req.body.misPlantillas){
+                for(x in req.body.misPlantillas){
+                    req.body.misPlantillas[x] = mongoose.Types.ObjectId(req.body.misPlantillas[x]);
+                }
+            }
+
+            if(req.body.misEstados){
+                for(x in req.body.misEstados){
+                    req.body.misEstados[x] = mongoose.Types.ObjectId(req.body.misEstados[x]);
+                }
+            }
+
             userModel.create({
                 estado      : req.body.estado,
                 perfil      : req.body.perfil,
@@ -14,6 +27,8 @@ app.post("/usuario", userModel.Auth, function(req, res){
                 usuario     : req.body.usuario,
                 password    : req.body.password,
                 permiso     : req.body.permiso,
+                misPlantillas : req.body.misPlantillas,
+                misEstados : req.body.misEstados,
                 metadata    : req.body.metadata,
                 empresa     : req.body.empresa
             }, function(err, usuario){
@@ -106,7 +121,14 @@ app.put('/usuario/:id', userModel.Auth, function(req, res, next) {
                         value.cliente         = mongoose.Types.ObjectId(req.body.cliente._id),
                         value.usuario         = req.body.usuario,
                         value.password        =  crypto.createHmac('sha1', "house1989*").update(req.body.password).digest("hex"),
-                        value.permiso         = req.body.permiso,
+                        value.permiso         = req.body.permiso
+                        
+                        if(req.body.misPlantillas){
+                            for(x in req.body.misPlantillas){
+                                req.body.misPlantillas[x] = mongoose.Types.ObjectId(req.body.misPlantillas[x]);
+                            }
+                        }
+
                         value.metadata        = req.body.metadata,
                         value.empresa         = req.body.empresa,
                         value.updated         = new Date();
@@ -120,7 +142,14 @@ app.put('/usuario/:id', userModel.Auth, function(req, res, next) {
                         value.perfil          = req.body.perfil,
                         value.cliente         = mongoose.Types.ObjectId(req.body.cliente._id),
                         value.usuario         = req.body.usuario,
-                        value.permiso         = req.body.permiso,
+                        value.permiso         = req.body.permiso
+                        
+                        if(req.body.misPlantillas){
+                            for(x in req.body.misPlantillas){
+                                req.body.misPlantillas[x] = mongoose.Types.ObjectId(req.body.misPlantillas[x]);
+                            }
+                        } 
+                                               
                         value.metadata        = req.body.metadata,
                         value.empresa         = req.body.empresa,
                         value.updated         = new Date(); 
@@ -223,6 +252,7 @@ app.post("/login", function(req, res){
     }
 
     userModel.findByUsername(req.body.usuario, function(err, usuario){
+
         if(err){
             res.status(400);
             res.end("user not found");
@@ -246,7 +276,28 @@ app.post("/login", function(req, res){
             userModel.createSession({token : _token, user : usuario }, function(err, userToken){
                 res.setHeader('Content-Type', 'application/json');
                 userToken.user.password = undefined;
-                res.send(JSON.stringify(userToken));
+
+
+                var options = {
+                  path: 'misPlantillas.plantilla',
+                  model: 'docPlantilla'
+                }
+
+                userModel.userSChema.populate(usuario, options, function (err, user) {
+
+                var optionsIndice = {
+                  path: 'misPlantillas.plantilla.indice',
+                  model: 'docIndice'
+                }
+                
+
+                userModel.userSChema.populate(user, optionsIndice, function(err, user){
+                    userToken.user = user;  
+                    res.send(JSON.stringify(userToken));
+                })
+                
+                });
+
             });            
         });
     });

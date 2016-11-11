@@ -129,6 +129,14 @@ app.put('/usuario/:id', userModel.Auth, function(req, res, next) {
                             }
                         }
 
+                        if(req.body.misEstados){
+                            for(x in req.body.misEstados){
+                                req.body.misEstados[x] = mongoose.Types.ObjectId(req.body.misEstados[x]);
+                            }
+                        }
+
+                        value.misEstados = req.body.misEstados,
+                        value.misPlantillas = req.body.misPlantillas,
                         value.metadata        = req.body.metadata,
                         value.empresa         = req.body.empresa,
                         value.updated         = new Date();
@@ -148,8 +156,16 @@ app.put('/usuario/:id', userModel.Auth, function(req, res, next) {
                             for(x in req.body.misPlantillas){
                                 req.body.misPlantillas[x] = mongoose.Types.ObjectId(req.body.misPlantillas[x]);
                             }
-                        } 
-                                               
+                        }
+
+                        if(req.body.misEstados){
+                            for(x in req.body.misEstados){
+                                req.body.misEstados[x] = mongoose.Types.ObjectId(req.body.misEstados[x]);
+                            }
+                        }
+                        
+                        value.misEstados = req.body.misEstados
+                        value.misPlantillas = req.body.misPlantillas,
                         value.metadata        = req.body.metadata,
                         value.empresa         = req.body.empresa,
                         value.updated         = new Date(); 
@@ -190,22 +206,6 @@ app.get('/usuario/buscar', userModel.Auth, function(req, res, next) {
                         res.status(200).json(_filters);
                     }
                 });
-
-
-               /*userModel.userSChema.find(
-                    {
-                        'estado.value'    :req.query.estado ? JSON.parse(req.query.estado).value : true,
-                        'cliente.documento' : req.query.documento ? req.query.documento : {'$ne': null },
-                    }
-                ).or([
-                    {'cliente.nombreCompleto' : new RegExp(req.query.cliente ? req.query.cliente : '', 'i')},
-                    {'cliente.representanteLegal' : new RegExp(req.query.cliente ? req.query.cliente : '', 'i')},
-                    {'cliente.razonSocial' : new RegExp(req.query.cliente ? req.query.cliente : '', 'i')}
-                ]).populate("").exec(function(err, values){
-                    if(!err){
-                        res.status(200).json(values);
-                    }
-                });*/
         }else{
             res.status(401);
             res.end();
@@ -219,8 +219,32 @@ app.get('/usuario/:id', userModel.Auth, function(req, res, next){
             userModel.userSChema.findOne({_id : req.params.id}).populate("cliente").exec(function(err, value){
                 if(!err){
                     value.password = undefined;
-                    console.log(value);
-                    res.send(JSON.stringify(value));
+
+                    var options = {
+                      path: 'misPlantillas',
+                      model: 'docRuta'
+                    }
+
+                    userModel.userSChema.populate(value, options, function (err, user) {
+
+                    var optionsIndice = [{
+                      path: 'misPlantillas.plantilla',
+                      model: 'docPlantilla'
+                    },
+                    {
+                      path: 'misEstados',
+                      model: 'docEstado'
+                    }
+                    ]
+                    
+
+                    userModel.userSChema.populate(user, optionsIndice, function(err, user){
+                        if(!err){
+                            res.status(200).json(user);
+                        }
+                    })
+                    
+                    });
                 }
             });
         }else{

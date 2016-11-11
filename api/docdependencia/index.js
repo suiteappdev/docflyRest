@@ -67,17 +67,17 @@ var docdependencia = function(router, args){
 		if(_acl.formularios[0].permisos.W){
 			args.schema.find({}, function(err, values){
 				if(!err){
- 		args.schema.findOne({id : req.params.id}, function(err, value){
- 			if(!err){
- 				console.log(req.body);
- 				value.text = req.body.text;
+				 		args.schema.findOne({id : req.params.id}, function(err, value){
+				 			if(!err){
+				 				console.log(req.body);
+				 				value.text = req.body.text;
 
- 				value.save(function(err, updated){
- 					res.status(200);
- 					res.send(updated);
- 				});
- 			}
- 		})
+				 				value.save(function(err, updated){
+				 					res.status(200);
+				 					res.send(updated);
+				 				});
+				 			}
+				 		})
 				}
 			})
 		}else{

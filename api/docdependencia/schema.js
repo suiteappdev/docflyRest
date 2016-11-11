@@ -1,6 +1,6 @@
 module.exports = function(mongoose){
 	var docDependenciaSchema = mongoose.Schema({
-	    id			: {type: String, index: {unique: true, required:true}},
+	    id			: String,
 	    parent		: String,
 	    text		: String,
 	    metadata 	: Object,

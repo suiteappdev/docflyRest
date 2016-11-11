@@ -51,7 +51,7 @@ app.get('/logout', function(req, res){
                 userModel.sessionSchema.getToken(token, function(err, token){
                     if(!token){
                         res.status(404);
-                        return res.send("user no found");
+                        return res.status(404).json({err : "user not found"});
                     }
 
                     token.remove();
@@ -264,34 +264,29 @@ app.get('/dashboard', userModel.Auth, function(req, res){
 app.post("/login", function(req, res){
     res.setHeader('Content-Type', 'application/json');
     if (!req.body.usuario) {
-        res.status(401);
-        res.send('Must specify a username');
+        res.status(401).json({err: 'Must specify a username'});
         return;
     }
 
     if (!req.body.password) {
-        res.status(401);
-        res.send('Must specify a password');
+        res.status(401).json({err : 'ust specify a password'});
         return;
     }
 
     userModel.findByUsername(req.body.usuario, function(err, usuario){
 
         if(err){
-            res.status(400);
-            res.end("user not found");
+            res.status(400).json({err: "user not found"});
             return;
         }
 
         if(!usuario){
-            res.status(404);
-            res.end("user not found");
+            res.status(404).json({err: "user not found"});
             return;
         }
 
         if(crypto.createHmac('sha1', "house1989*").update(req.body.password).digest("hex") !== usuario.password){
-            res.status(400)
-            res.end("password not match");
+             res.status(400).json({err: "password not match"});
             return;
         }
 
@@ -317,7 +312,7 @@ app.post("/login", function(req, res){
 
                 userModel.userSChema.populate(user, optionsIndice, function(err, user){
                     userToken.user = user;  
-                    res.send(JSON.stringify(userToken));
+                    res.status(200).json(userToken);
                 })
                 
                 });

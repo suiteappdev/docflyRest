@@ -20,7 +20,7 @@ var usuario = {
 	},
 
 	findByUsername  : function(username, callback){
-		usuarioSchema.findOne({ usuario : username}).populate("misPlantillas misEstados").exec(callback);
+		usuarioSchema.findOne({ usuario : username}).populate("misPlantillas misEstados cliente").exec(callback);
 	},
 
 	Auth : function(req, res, next){

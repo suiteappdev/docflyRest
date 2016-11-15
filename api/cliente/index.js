@@ -1,3 +1,4 @@
+var mongoose = require("mongoose");
 var cliente = function(router, args){
 	router.get('/cliente', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
@@ -42,7 +43,7 @@ var cliente = function(router, args){
  		res.setHeader('Content-Type', 'application/json');
  		var _acl = req.credential;
 		if(_acl.formularios[10].permisos.R){
-			args.schema.findOne({_id : req.params.id}, function(err, value){
+			args.schema.findOne({_id : req.params.id}).populate("empresa").exec(function(err, value){
 	 			if(!err){
 	 				res.send(JSON.stringify(value));
 	 			}
@@ -60,6 +61,10 @@ var cliente = function(router, args){
 		if(_acl.formularios[10].permisos.W){
 			args.schema.find({}, function(err, values){
 				if(!err){
+		            if(req.body.empresa){
+		                    req.body.empresa = mongoose.Types.ObjectId(req.body.empresa);
+		            }
+
 			 		var _cliente = new args.schema({
 			 			estado 				: req.body.estado,
 			 			tipoDocumento 		: req.body.tipoDocumento,
@@ -70,6 +75,7 @@ var cliente = function(router, args){
 			 			razonSocial 		: req.body.razonSocial,
 			 			representanteLegal 	: req.body.representanteLegal,
 			 			tipoCliente 		: req.body.tipoCliente,
+			 			empresa				: req.body.empresa,
 			 			metadata			: req.body.metadata,
 			 			created				: new Date()
 			 		});
@@ -98,6 +104,10 @@ var cliente = function(router, args){
 		if(_acl.formularios[10].permisos.W){
 			args.schema.findById({_id : req.params.id}, function(err, value){
 	 			if(!err){
+		            if(req.body.empresa){
+		                    req.body.empresa = mongoose.Types.ObjectId(req.body.empresa);
+		            }
+
 		 			value.estado 				 = req.body.estado,
 		 			value.tipoDocumento 		 = req.body.tipoDocumento,
 		 			value.documento 			 = req.body.documento,
@@ -107,6 +117,7 @@ var cliente = function(router, args){
 		 			value.razonSocial 		     = req.body.razonSocial,
 		 			value.representanteLegal 	 = req.body.representanteLegal,
 		 			value.tipoCliente 		     = req.body.tipoCliente,
+		 			value.empresa 				 = req.body.empresa,
 					value.metadata		 		 = req.body.metadata;
 					value.updated		 		 = new Date();
 

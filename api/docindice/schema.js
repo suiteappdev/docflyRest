@@ -4,6 +4,7 @@ module.exports = function(mongoose){
 	    tipo			: String,
 	    longitud		: Number,
 	    requerido		: Boolean, 
+	    unico 			: Boolean,
 	    editable		: { type : Boolean, default : false},
 	    created 		: { type: Date, default: Date.now }
 	});

@@ -10,7 +10,7 @@ var usuarioSchema = new Schema({
     password		: String,
     permiso			: Object,
     created 		: { type: Date, default: Date.now },
-    metadata		: Object,
+    metadata        : Object,
     misPlantillas   : [{ type : Schema.Types.ObjectId , ref : 'docRuta'}],
     misEstados   : [{ type : Schema.Types.ObjectId , ref : 'docEstado'}],
     update			: Date,

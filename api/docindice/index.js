@@ -53,6 +53,7 @@ var docIndice = function(router, args){
 	 			tipo				: req.body.tipo,
 	 			editable			: req.body.editable,
 	 			requerido			: req.body.requerido,
+	 			unico				: req.body.unico,
 	 			longitud			: req.body.longitud,
 	 			created 			: new Date(),
 	 		});
@@ -78,6 +79,7 @@ var docIndice = function(router, args){
 		 			value.tipo				= req.body.tipo,
 		 			value.editable			= req.body.editable,
 		 			value.requerido			= req.body.requerido,
+		 			value.unico				= req.body.unico,
 		 			value.longitud			= req.body.longitud,
 					value.updated			= new Date();
 

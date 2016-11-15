@@ -12,8 +12,15 @@ module.exports = function(mongoose){
 	    plantilla		: Object,
 	    enUso			: Boolean, 
 	    consecutivo		: Number,
+	    empresa			: { type : schema.Types.ObjectId , ref : 'empresa'},
 	    created 		: { type: Date, default: Date.now },
 	    metadata		: Object
+	});
+
+	docDocumentacionSchema.pre('save', function (next) {
+	    var self = this;
+	    next();
+
 	});
 
 	return mongoose.model('docDocumentacion', docDocumentacionSchema, 'docDocumentacion');

@@ -1,3 +1,4 @@
+var mongoose = require("mongoose");
 var docdependencia = function(router, args){
 	router.get('/docdependencia', args.security.Auth, function(req, res, next) {
  		res.setHeader('Content-Type', 'application/json');
@@ -36,7 +37,7 @@ var docdependencia = function(router, args){
 			args.schema.find({}, function(err, values){
 				if(!err){
  		var _docdependencia = new args.schema({
- 			id 					: req.body.id,
+ 			id 					:  mongoose.Types.ObjectId(),
  			parent				: req.body.parent ? req.body.parent : '#',
  			text				: req.body.id,
  			created 			: new Date(),

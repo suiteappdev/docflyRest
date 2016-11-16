@@ -161,31 +161,22 @@ var docDocumento = function(router, args, io){
 		 		});
 
 	    
-			    for(var x in  req.body.plantilla.indice){
-			    	if(req.body.plantilla.indice[x].unico){
-					    mongoose.models["docDocumentacion"].findOne({'plantilla.indice': {$elemMatch: { value: req.body.plantilla.indice[x].value, unico : true}}}, function(err, data) {
-					    	console.log("data rs", data);
-					    	if(!err){
-						        found.push(data)
-						        return; 					    		
-					    	}
-					    });	    		
-			    	}
-			    }
+	 			var unique = req.body.plantilla.indice.filter(function(obj){ return obj.unico});
+	    		
+	    		if(unique){
+	    			mongoose.models["docDocumentacion"].findOne({'plantilla.indice': {$elemMatch: { value: unique[0].value, unico : true}}}).exec(function(err, docs){
+	    				if(docs){
+	          					return res.status(409).json({err:"este inidice esta duplicado", indice:unique});
+	    				}
 
-			    console.log(found);
-
-			    if(found.length > 0){
-			    	console.log("found", data);
-		          return res.status(500).json({err:"ya existe"});
-			    }else{
-			 		_docDocumento.save(function(err, value){
-			 			if(!err){
-			 				res.status(200).json(value);
-			 				//io.emit(value.estado.nombre, value);
-			 			}
-			 		});			    	
-			    }
+				 		_docDocumento.save(function(err, value){
+				 			if(!err){
+				 				res.status(200).json(value);
+				 				//io.emit(value.estado.nombre, value);
+				 			}
+				 		});	
+	    			});
+	    		}
 			}
 		}else{
 			res.status(401);

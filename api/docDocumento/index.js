@@ -126,7 +126,7 @@ var docDocumento = function(router, args, io){
 				    		
 				    		console.log("campo unico", unique);
 
-				    		if(unique){
+				    		if(unique.length > 0){
 				    			mongoose.models["docDocumentacion"].findOne({'plantilla.indice': {$elemMatch: { value: unique[0].value, unico : true}}}).exec(function(err, docs){
 				    				if(docs){
 				          					return res.status(409).json({err:"indice duplicado", indice:unique});

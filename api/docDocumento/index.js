@@ -124,8 +124,6 @@ var docDocumento = function(router, args, io){
 
 				 			var unique = req.body.plantilla.indice.filter(function(obj){ return obj.unico});
 				    		
-				    		console.log("campo unico", unique);
-
 				    		if(unique.length > 0){
 				    			mongoose.models["docDocumentacion"].findOne({'plantilla.indice': {$elemMatch: { value: unique[0].value, unico : true}}}).exec(function(err, docs){
 				    				if(docs){
@@ -139,6 +137,13 @@ var docDocumento = function(router, args, io){
 							 			}
 							 		});	
 				    			});
+				    		}else{
+						 		_docDocumento.save(function(err, value){
+						 			if(!err){
+						 				res.status(200).json(value);
+						 				//io.emit(value.estado.nombre, value);
+						 			}
+						 		});
 				    		}
 
 				});				
@@ -165,7 +170,7 @@ var docDocumento = function(router, args, io){
 	    
 	 			var unique = req.body.plantilla.indice.filter(function(obj){ return obj.unico});
 	    		
-	    		if(unique){
+	    		if(unique.length > 0){
 	    			mongoose.models["docDocumentacion"].findOne({'plantilla.indice': {$elemMatch: { value: unique[0].value, unico : true}}}).exec(function(err, docs){
 	    				if(docs){
 	          					return res.status(409).json({err:"este inidice esta duplicado", indice:unique});
@@ -178,6 +183,13 @@ var docDocumento = function(router, args, io){
 				 			}
 				 		});	
 	    			});
+	    		}else{
+			 		_docDocumento.save(function(err, value){
+			 			if(!err){
+			 				res.status(200).json(value);
+			 				//io.emit(value.estado.nombre, value);
+			 			}
+			 		});	
 	    		}
 			}
 		}else{

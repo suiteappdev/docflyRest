@@ -124,10 +124,12 @@ var docDocumento = function(router, args, io){
 
 				 			var unique = req.body.plantilla.indice.filter(function(obj){ return obj.unico});
 				    		
+				    		console.log("campo unico", unique);
+
 				    		if(unique){
 				    			mongoose.models["docDocumentacion"].findOne({'plantilla.indice': {$elemMatch: { value: unique[0].value, unico : true}}}).exec(function(err, docs){
 				    				if(docs){
-				          					return res.status(409).json({err:"este inidice esta duplicado", indice:unique});
+				          					return res.status(409).json({err:"indice duplicado", indice:unique});
 				    				}
 
 							 		_docDocumento.save(function(err, value){
